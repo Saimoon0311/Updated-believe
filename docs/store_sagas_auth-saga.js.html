@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: store/sagas/auth-saga.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: store/sagas/auth-saga.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import {call, put, takeLatest, delay} from 'redux-saga/effects';
+import AuthService from '../../services/auth-service';
+import {
+  getToken,
+  hasKey,
+  removeToken,
+  storeToken,
+  storeValue,
+} from '../../services/storage';
+import {updateAuth} from '../actions/auth-action';
+import {showError, showSuccess} from '../../services/SnackBar';
+import Types from '../saga-types';
+import SplashScreen from 'react-native-splash-screen';
+import SocialLogin from '../../services/SocialLogin';
+import auth from '@react-native-firebase/auth';
+import {statusCodes} from '@react-native-google-signin/google-signin';
+import NavigationService from '../../services/NavigationService';
+import {
+  getDataRenewCat,
+  getFbResult,
+  loginUser,
+  registerUser,
+  resetUserEmail,
+  setAttributeRev,
+  signInWithFirebase,
+} from '../../utils/helper';
+import cache from '../../utils/helper/cache';
+import Purchases from 'react-native-purchases';
+import {store} from '../store';
+import {
+  allSubID,
+  believePackagsAndroidSKU,
+  believePackagsIosSKU,
+  believePackagsSKU,
+  believePackagsStripeSKU,
+} from '../../utils/helper/LocalDb';
+import {Platform} from 'react-native';
+// import API from '@/services/API';
+import OneSignal from 'react-native-onesignal';
+import {firebase} from '@react-native-firebase/analytics';
+
+const handleNewUser = ({audio, params}) => {
+  NavigationService.navigate('Subscription', {
+    audio,
+    ...params,
+    isSignUp: true,
+  });
+};
+
+const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+/** This function is used to add the fcm token to the database. **/
+function* fcmTokenSaga(action) {
+  yield call(AuthService.fcmTokenAdd, action.payload);
+}
+
+/** This is a generator function which is used to login the user. **/
+function* loginSaga(action) {
+  try {
+    yield put(updateAuth({loading: true}));
+    yield call(loginUser, action.payload);
+    const idTokenResult = yield call(getFbResult);
+    const jwtToken = idTokenResult.token;
+    console.log(jwtToken, 'aklsdfjakljsdflkajsdkfl');
+    if (jwtToken) {
+      const {ok, data} = yield call(AuthService.firebaseLogin, {
+        token: jwtToken,
+      });
+      if (ok) {
+        const {detail, token} = data;
+        storeToken('USER/TOKEN', token);
+        cache.store('/verify', detail);
+        yield put(updateAuth({user: detail, isLogin: true, token}));
+        showSuccess(data?.message);
+        firebase.analytics().logLogin({method: 'com.email'});
+        // yield call(analytics().logLogin, {method: 'com.email'});
+      } else {
+        console.log('login error rororr ororroelelelelelelele', data);
+        showError(data?.message);
+      }
+    }
+  } catch (error) {
+    console.log('login error rororr ororro', error);
+    showError(error.message.split(' ').slice(1).join(' '));
+  } finally {
+    yield put(updateAuth({loading: false}));
+  }
+}
+
+/** This is a generator function which is used to signup the user. **/
+function* signUpSaga(action) {
+  try {
+    yield put(updateAuth({loading: true}));
+    yield call(registerUser, action.payload);
+    const idTokenResult = yield call(getFbResult);
+    const jwtToken = idTokenResult.token;
+    const {params, name} = action.payload;
+    if (jwtToken) {
+      const {ok, data} = yield call(AuthService.firebaseSignUp, {
+        token: jwtToken,
+        name,
+        timezone,
+        age: params?.age?.name,
+        usergoal_ids: params?.goals,
+        gender: params?.gender?.name,
+        userfeeling_ids: params?.feeling,
+        platform: Platform.OS,
+      });
+      console.log('dadtadtadtda', data, params);
+      if (ok) {
+        const {detail, token, audio} = data;
+        yield put(updateAuth({user: detail, isLogin: true, token}));
+        storeToken('USER/TOKEN', token);
+        cache.store('/verify', detail);
+        yield call(handleNewUser, {params, audio});
+        // yield call(firebase.analytics().logLogin, {method: 'com.email'});
+        firebase.analytics().logLogin({method: 'com.email'});
+
+        showSuccess(data?.message);
+      } else {
+        console.log(
+          'jkdb vjbvjsdbvjksdbvjsdbvjksdbvjksdbvjksdbvjsdbvjsd',
+          data,
+        );
+        showError(data?.message);
+      }
+    }
+  } catch (error) {
+    console.log(
+      'kjsdbcjksbd vjksasdasdasdasdfsdfsdfsdfsdfsdfsdfsdfsdasddbvjsvd',
+      error,
+    );
+    showError(error.message.split(' ').slice(1).join(' '));
+  } finally {
+    yield put(updateAuth({loading: false}));
+  }
+}
+
+/**
+ * It signs the user out of the app
+ **/
+const authLogout = () => auth().signOut();
+
+/** A generator function which is used to logout the user. **/
+function* logOutSaga() {
+  try {
+    const downloads = cache.get('downloadedFiles') || [];
+    yield call(removeToken);
+    yield put({type: Types.LogOut});
+    yield call(authLogout);
+    cache.store('downloadedFiles', []);
+  } catch (error) {
+    console.log('ererere', error);
+  }
+}
+
+/** This function is used to verify the user. **/
+function* verifyUserSaga() {
+  try {
+    setTimeout(() => SplashScreen.hide(), 100);
+    // yield put(updateAuth({showAnimatedSplash: true}));
+    if (hasKey('background') == false) storeValue('background', 'true');
+    const token = yield call(getToken) || {};
+    const {Auth} = store.getState();
+    console.log('token verifyUserSaga', token, Auth);
+    if (token) {
+      yield put(updateAuth({token}));
+      const {ok, data} = yield call(AuthService.verifyUser);
+      yield call(AuthService.updateStreak);
+      if (ok) yield put(updateAuth({user: data, isLogin: true}));
+    }
+  } catch (error) {
+    showError(error.message.split(' ').slice(1).join(' '));
+  } finally {
+    setTimeout(() => SplashScreen.hide(), 100);
+  }
+}
+
+/** This function is used to reset the user password. **/
+function* forgotUserSaga(action) {
+  try {
+    yield put(updateAuth({loading: true}));
+    yield call(resetUserEmail, action.payload);
+    showSuccess('Password Reset Request has been sent to your mail');
+    NavigationService.navigate('Login');
+  } catch (error) {
+    showError(error.message.split(' ').slice(1).join(' '));
+  } finally {
+    yield put(updateAuth({loading: false}));
+  }
+}
+
+/** This function is used to verify the user. **/
+function* verificationSaga(action) {
+  const {ok, data, originalError} = yield call(
+    AuthService.verification,
+    action.payload,
+  );
+  if (ok) {
+    yield put(updateAuth({verification: true, verifyToken: data?.token}));
+    showSuccess(data?.message);
+    yield put(updateAuth({verification: false}));
+  } else {
+    const message = data?.message || originalError?.message;
+    showError(message);
+  }
+}
+
+/** This function is used to update the user profile. **/
+function* updateProfileSaga(action) {
+  const {ok, data, originalError} = yield call(
+    AuthService.updateProfileService,
+    action.payload,
+  );
+  if (ok) {
+    const {user} = data;
+    yield put(updateAuth({update: true, user}));
+    showSuccess(data?.message);
+  } else {
+    const message = data?.message || originalError?.message;
+    showError(message);
+  }
+}
+
+/** This function is used to update the user subscription. **/
+function* updateSubSaga(action) {
+  const {payload} = action;
+  yield put(updateAuth({user: payload, loading: true}));
+  yield put(updateAuth({loading: false}));
+  console.log('sga =========>>>>>>>>>>>>', payload);
+}
+
+/** This function is used to update the user password. **/
+function* updatePasswordSaga(action) {
+  const {ok, data, originalError} = yield call(
+    AuthService.updatePassword,
+    action.payload,
+  );
+  if (ok) {
+    yield put(updateAuth({update: true, verifyToken: ''}));
+    showSuccess(data?.message);
+    delay(1000);
+    yield put(updateAuth({update: false}));
+  } else {
+    const message = data?.message || originalError?.message;
+    showError(message);
+  }
+}
+
+/** This function is used to login the user with the social media. **/
+function* socialLoginSaga({payload}) {
+  try {
+    const {provider, params} = payload;
+    console.log('pyload', payload);
+    const response = yield call(SocialLogin[`logInWith${provider?.name}`]);
+    console.log('resposnsasdasdasdasdasdasdadasde', response);
+    yield put(updateAuth({loading: true}));
+    yield call(
+      signInWithFirebase,
+      provider?.name == 'apple' ? response.token : response,
+    );
+    const idTokenResult = yield call(getFbResult);
+    const jwtToken = idTokenResult.token;
+    if (jwtToken) {
+      const endPoints = params
+        ? AuthService.firebaseSignUp
+        : AuthService.firebaseLogin;
+
+      const {ok, data} = yield call(endPoints, {
+        token: jwtToken,
+        // name: 'default name ',
+        name: response?.name || '',
+        timezone,
+        age: params?.age?.name,
+        usergoal_ids: params?.goals,
+        gender: params?.gender?.name,
+        userfeeling_ids: params?.feeling,
+        platform: Platform.OS,
+      });
+      if (ok) {
+        const {detail, token, audio} = data;
+
+        console.log('datadatadatadatadatadatadatadatadatadatadata', data);
+        yield put(updateAuth({user: detail, isLogin: true, token}));
+        storeToken('USER/TOKEN', token);
+        cache.store('/verify', detail);
+        console.log('data after updated', detail);
+        if (params) yield call(handleNewUser, {params, audio});
+        // yield call(firebase.analytics().logLogin, {
+        //   method: `${provider?.name}+.com`,
+        // });
+        firebase.analytics().logLogin({method: `${provider?.name}.com`});
+
+        showSuccess('You are now logged in');
+      } else {
+        console.log('kjsdbcjksbdddddd sdfsdfsdfsdfsdfsdfvjksdbvjsvd', data);
+        showError(data?.message);
+      }
+    }
+  } catch (error) {
+    switch (error?.code || error?.message) {
+      case statusCodes.SIGN_IN_CANCELLED:
+      case '1001':
+        showError('Cancelled');
+        break;
+      case statusCodes.IN_PROGRESS:
+        console.log('In progress');
+        break;
+      case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
+        showError('Play services not available or outdated');
+        break;
+      default:
+        showError(error?.message || 'Something went wrong');
+        break;
+    }
+  } finally {
+    yield put(updateAuth({loading: false}));
+  }
+}
+
+const getUserData = async () => {
+  return await Purchases.getCustomerInfo();
+};
+/**
+ * The function `getUserSaga` is an asynchronous function that retrieves user data, verifies the user,
+ * and updates the user's subscription status based on the retrieved data.
+ **/
+
+const getUserSaga = async () => {
+  let user = {};
+  try {
+    const getData = await getUserData();
+    const {Auth} = store.getState();
+    console.log('AuthAuthAuthAuthAuth', Auth);
+    const {data} = await AuthService.verifyUser();
+
+    console.log(
+      'datadatadatadatadatadatadatadatadatadatadatadatadatadatadata',
+      data,
+    );
+    let keyValue = data?.store?.toLowerCase();
+    if (data.revenuecat_customer_id != null) {
+      if (data.life_time == 'true') {
+        user = {
+          ...data,
+          subscribed: true,
+          is_subscribed: true,
+        };
+        storeValue('suscribe', 'true');
+        store.dispatch(updateAuth({user}));
+        OneSignal.sendTag('status', 'paid');
+        console.log('data', user);
+      } else if (keyValue == 'stripe') {
+        var title =
+          believePackagsStripeSKU[0] == data.identifer ? 'Yearly' : 'Monthly';
+        console.log('titletitletitletitletitletitle', title);
+        user = {
+          ...data,
+          user_subscription: {
+            change_possible: true,
+            subscription_type: title,
+          },
+          subscribed: true,
+          is_subscribed: true,
+          store: data.store,
+          identifer: data.identifer,
+        };
+        storeValue('suscribe', 'true');
+        OneSignal.sendTag('status', 'paid');
+        store.dispatch(updateAuth({user}));
+      } else if (data.identifer != null) {
+        var title = allSubID[data.identifer];
+        user = {
+          ...data,
+          user_subscription: {
+            change_possible: true,
+            subscription_type: title,
+          },
+          subscribed: true,
+          is_subscribed: true,
+        };
+        storeValue('suscribe', 'true');
+        setAttributeRev(user);
+        OneSignal.sendTag('status', 'paid');
+        store.dispatch(updateAuth({user}));
+      } else {
+        if (getData.entitlements.active['AppStorePlans'] != undefined) {
+          await AuthService.getPro({pro_sub: true});
+          // var platform =
+          //   Platform.OS == 'ios'
+          //     ? believePackagsIosSKU[0]
+          //     : believePackagsAndroidSKU[0];
+          var title =
+            allSubID[
+              getData.entitlements.active['AppStorePlans'].productIdentifier
+            ];
+
+          console.log(
+            'if',
+            getData.entitlements.active['AppStorePlans'],
+            title,
+          );
+          user = {
+            ...data,
+            user_subscription: {
+              change_possible: true,
+              subscription_type: title,
+            },
+            subscribed: true,
+            is_subscribed: true,
+            store: getData.entitlements.active['AppStorePlans'].store,
+            identifer:
+              getData.entitlements.active['AppStorePlans'].productIdentifier,
+          };
+          storeValue('suscribe', 'true');
+          OneSignal.sendTag('status', 'paid');
+          setAttributeRev(user);
+          store.dispatch(updateAuth({user}));
+        } else {
+          console.log('else', getData.entitlements);
+          if (data.name) {
+            user = {
+              ...data,
+              user_subscription: {
+                change_possible: true,
+                subscription_type: 'Free',
+              },
+              subscribed: false,
+              is_subscribed: false,
+            };
+            storeValue('suscribe', 'false');
+            setAttributeRev(user);
+          }
+          OneSignal.sendTag('status', 'free');
+          console.log('cecoign vf ', user);
+          store.dispatch(updateAuth({user}));
+        }
+      }
+    } else {
+      storeValue('suscribe', JSON.stringify(data.is_subscribed));
+      store.dispatch(
+        updateAuth({user: {...data, subscribed: data.is_subscribed}}),
+      );
+      OneSignal.sendTag('status', data.is_subscribed ? 'paid' : 'free');
+    }
+  } catch (error) {
+    console.log('errrprr', error);
+    // showError('Some thing went wrong');
+  }
+};
+
+/** A generator function which is used to listen to the actions. **/
+function* authSaga() {
+  yield takeLatest(Types.Login_Dispatch, loginSaga);
+  yield takeLatest(Types.SignUp_Dispatch, signUpSaga);
+  yield takeLatest(Types.LogOut_Dispatch, logOutSaga);
+  yield takeLatest(Types.Verify_Dispatch, verifyUserSaga);
+  yield takeLatest(Types.Forgot_Dispatch, forgotUserSaga);
+  yield takeLatest(Types.Verification_Dispatch, verificationSaga);
+  yield takeLatest(Types.Update_Dispatch, updatePasswordSaga);
+  yield takeLatest(Types.SocialLogin_Dispatch, socialLoginSaga);
+  yield takeLatest(Types.UpdateProfile_Dispatch, updateProfileSaga);
+  yield takeLatest(Types.FCMToken_Dispatch, fcmTokenSaga);
+  yield takeLatest(Types.getUser_Dispatch, getUserSaga);
+  yield takeLatest(Types.updateSubUser_Dispatch, updateSubSaga);
+}
+
+export default authSaga;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AuthService.html">AuthService</a></li><li><a href="ContentService.html">ContentService</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="SocialLogin.html">SocialLogin</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AMPMLayout">AMPMLayout</a></li><li><a href="global.html#Achievement">Achievement</a></li><li><a href="global.html#ChangePassword">ChangePassword</a></li><li><a href="global.html#ChartStats">ChartStats</a></li><li><a href="global.html#ContentLoading">ContentLoading</a></li><li><a href="global.html#EmptyComponent">EmptyComponent</a></li><li><a href="global.html#FontSize">FontSize</a></li><li><a href="global.html#Goals">Goals</a></li><li><a href="global.html#MainTabScreen">MainTabScreen</a></li><li><a href="global.html#OnboardStack">OnboardStack</a></li><li><a href="global.html#Onboarding">Onboarding</a></li><li><a href="global.html#PlayListEdit">PlayListEdit</a></li><li><a href="global.html#Schemas">Schemas</a></li><li><a href="global.html#Settings">Settings</a></li><li><a href="global.html#StreakSection">StreakSection</a></li><li><a href="global.html#SubscriptionsTest">SubscriptionsTest</a></li><li><a href="global.html#UseForget">UseForget</a></li><li><a href="global.html#UseLogin">UseLogin</a></li><li><a href="global.html#UseNewPassword">UseNewPassword</a></li><li><a href="global.html#UseRegister">UseRegister</a></li><li><a href="global.html#UseVerification">UseVerification</a></li><li><a href="global.html#ViewAll">ViewAll</a></li><li><a href="global.html#addMusicSaga">addMusicSaga</a></li><li><a href="global.html#addPlaylistScheme">addPlaylistScheme</a></li><li><a href="global.html#addToPlaylistSaga">addToPlaylistSaga</a></li><li><a href="global.html#appStreakSaga">appStreakSaga</a></li><li><a href="global.html#authLogout">authLogout</a></li><li><a href="global.html#authSaga">authSaga</a></li><li><a href="global.html#auth_reducer">auth_reducer</a></li><li><a href="global.html#cacheMedia">cacheMedia</a></li><li><a href="global.html#contentSaga">contentSaga</a></li><li><a href="global.html#contentTime">contentTime</a></li><li><a href="global.html#contentTimeWithOutSec">contentTimeWithOutSec</a></li><li><a href="global.html#content_reducer">content_reducer</a></li><li><a href="global.html#courseTimeView">courseTimeView</a></li><li><a href="global.html#createBranchLink">createBranchLink</a></li><li><a href="global.html#createPlaylistSaga">createPlaylistSaga</a></li><li><a href="global.html#deleteAllFiles">deleteAllFiles</a></li><li><a href="global.html#deleteFiles">deleteFiles</a></li><li><a href="global.html#deletePlaylistSaga">deletePlaylistSaga</a></li><li><a href="global.html#deviceStorage">deviceStorage</a></li><li><a href="global.html#durationAsString">durationAsString</a></li><li><a href="global.html#durationCall">durationCall</a></li><li><a href="global.html#editPlaylistSaga">editPlaylistSaga</a></li><li><a href="global.html#editProfileScheme">editProfileScheme</a></li><li><a href="global.html#eventDateView">eventDateView</a></li><li><a href="global.html#fcmTokenSaga">fcmTokenSaga</a></li><li><a href="global.html#file_reducer">file_reducer</a></li><li><a href="global.html#forgotSchema">forgotSchema</a></li><li><a href="global.html#forgotUserSaga">forgotUserSaga</a></li><li><a href="global.html#generateDiscountStr">generateDiscountStr</a></li><li><a href="global.html#generateSubViewObject">generateSubViewObject</a></li><li><a href="global.html#generateSubViewObjectAndroid">generateSubViewObjectAndroid</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#getAllBackgroundSaga">getAllBackgroundSaga</a></li><li><a href="global.html#getAllCategoryAndLibrariesSaga">getAllCategoryAndLibrariesSaga</a></li><li><a href="global.html#getAllContentLibrariesSaga">getAllContentLibrariesSaga</a></li><li><a href="global.html#getAllCoursesSaga">getAllCoursesSaga</a></li><li><a href="global.html#getAllFeelingsSaga">getAllFeelingsSaga</a></li><li><a href="global.html#getAllGoalsSaga">getAllGoalsSaga</a></li><li><a href="global.html#getAllHomeContentSaga">getAllHomeContentSaga</a></li><li><a href="global.html#getAllLibraryAudiosSaga">getAllLibraryAudiosSaga</a></li><li><a href="global.html#getAllLiveEventsSaga">getAllLiveEventsSaga</a></li><li><a href="global.html#getAllRemindersSaga">getAllRemindersSaga</a></li><li><a href="global.html#getAllReviewsSaga">getAllReviewsSaga</a></li><li><a href="global.html#getAllRingtonesSaga">getAllRingtonesSaga</a></li><li><a href="global.html#getAllScriptChaptersSaga">getAllScriptChaptersSaga</a></li><li><a href="global.html#getAllTracksSaga">getAllTracksSaga</a></li><li><a href="global.html#getAllVideosSaga">getAllVideosSaga</a></li><li><a href="global.html#getCourseLessons">getCourseLessons</a></li><li><a href="global.html#getCredentials">getCredentials</a></li><li><a href="global.html#getCurrentTimeWithFormat">getCurrentTimeWithFormat</a></li><li><a href="global.html#getDataRenewCat">getDataRenewCat</a></li><li><a href="global.html#getEBooksSaga">getEBooksSaga</a></li><li><a href="global.html#getFavoriteSaga">getFavoriteSaga</a></li><li><a href="global.html#getFbResult">getFbResult</a></li><li><a href="global.html#getFileExtension">getFileExtension</a></li><li><a href="global.html#getOnBoardToken">getOnBoardToken</a></li><li><a href="global.html#getPlaylistAudioSaga">getPlaylistAudioSaga</a></li><li><a href="global.html#getPlaylistSaga">getPlaylistSaga</a></li><li><a href="global.html#getRecentlySearch">getRecentlySearch</a></li><li><a href="global.html#getReminders">getReminders</a></li><li><a href="global.html#getScriptsSaga">getScriptsSaga</a></li><li><a href="global.html#getSearch">getSearch</a></li><li><a href="global.html#getSeriesSaga">getSeriesSaga</a></li><li><a href="global.html#getSuggestedData">getSuggestedData</a></li><li><a href="global.html#getUrlExtention">getUrlExtention</a></li><li><a href="global.html#getUserSaga">getUserSaga</a></li><li><a href="global.html#hit_Control">hit_Control</a></li><li><a href="global.html#initialState">initialState</a></li><li><a href="global.html#logInUpschema">logInUpschema</a></li><li><a href="global.html#logOutSaga">logOutSaga</a></li><li><a href="global.html#loginSaga">loginSaga</a></li><li><a href="global.html#loginUser">loginUser</a></li><li><a href="global.html#mediaPermission">mediaPermission</a></li><li><a href="global.html#meditationTimeView">meditationTimeView</a></li><li><a href="global.html#musicSaga">musicSaga</a></li><li><a href="global.html#onNotificationNotiFee">onNotificationNotiFee</a></li><li><a href="global.html#onShareFromApp">onShareFromApp</a></li><li><a href="global.html#permission">permission</a></li><li><a href="global.html#postReviewSaga">postReviewSaga</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#removeMusicSaga">removeMusicSaga</a></li><li><a href="global.html#removePlaylistAudioSaga">removePlaylistAudioSaga</a></li><li><a href="global.html#resetPasswordScheme">resetPasswordScheme</a></li><li><a href="global.html#resetUserEmail">resetUserEmail</a></li><li><a href="global.html#saveReminders">saveReminders</a></li><li><a href="global.html#secondsToTime">secondsToTime</a></li><li><a href="global.html#sendAudioViewCountSaga">sendAudioViewCountSaga</a></li><li><a href="global.html#sessionReducer">sessionReducer</a></li><li><a href="global.html#setAttributeRev">setAttributeRev</a></li><li><a href="global.html#shareStats">shareStats</a></li><li><a href="global.html#showError">showError</a></li><li><a href="global.html#showInfo">showInfo</a></li><li><a href="global.html#showSuccess">showSuccess</a></li><li><a href="global.html#signInWithFirebase">signInWithFirebase</a></li><li><a href="global.html#signUpSaga">signUpSaga</a></li><li><a href="global.html#socialLoginSaga">socialLoginSaga</a></li><li><a href="global.html#storeOnBoardToken">storeOnBoardToken</a></li><li><a href="global.html#timeLayout">timeLayout</a></li><li><a href="global.html#toggleFavoriteSaga">toggleFavoriteSaga</a></li><li><a href="global.html#toggleMusicSaga">toggleMusicSaga</a></li><li><a href="global.html#triggerReview">triggerReview</a></li><li><a href="global.html#updatePasswordSaga">updatePasswordSaga</a></li><li><a href="global.html#updatePlaylistAudioSaga">updatePlaylistAudioSaga</a></li><li><a href="global.html#updateProfileSaga">updateProfileSaga</a></li><li><a href="global.html#updateSubSaga">updateSubSaga</a></li><li><a href="global.html#useAddPlayListData">useAddPlayListData</a></li><li><a href="global.html#useAudioContent">useAudioContent</a></li><li><a href="global.html#useBackgroundSelect">useBackgroundSelect</a></li><li><a href="global.html#useBadges">useBadges</a></li><li><a href="global.html#useCourseDetail">useCourseDetail</a></li><li><a href="global.html#useCourses">useCourses</a></li><li><a href="global.html#useDownloads">useDownloads</a></li><li><a href="global.html#useEBooks">useEBooks</a></li><li><a href="global.html#useEditPlaylist">useEditPlaylist</a></li><li><a href="global.html#useEditProfile">useEditProfile</a></li><li><a href="global.html#useEvent">useEvent</a></li><li><a href="global.html#useFavorites">useFavorites</a></li><li><a href="global.html#useFinalize">useFinalize</a></li><li><a href="global.html#useGoals">useGoals</a></li><li><a href="global.html#useHome">useHome</a></li><li><a href="global.html#useIntroduction">useIntroduction</a></li><li><a href="global.html#useLibrary">useLibrary</a></li><li><a href="global.html#useLibraryDetails">useLibraryDetails</a></li><li><a href="global.html#useMe">useMe</a></li><li><a href="global.html#useMusicPlayer">useMusicPlayer</a></li><li><a href="global.html#useNotifications">useNotifications</a></li><li><a href="global.html#usePlaylistDetails">usePlaylistDetails</a></li><li><a href="global.html#useReadContent">useReadContent</a></li><li><a href="global.html#useReduxStore">useReduxStore</a></li><li><a href="global.html#useReminderDetail">useReminderDetail</a></li><li><a href="global.html#useReminders">useReminders</a></li><li><a href="global.html#useReviews">useReviews</a></li><li><a href="global.html#useScriptDetails">useScriptDetails</a></li><li><a href="global.html#useScripts">useScripts</a></li><li><a href="global.html#useSearch">useSearch</a></li><li><a href="global.html#useSeries">useSeries</a></li><li><a href="global.html#useSeriesDetails">useSeriesDetails</a></li><li><a href="global.html#useSessionSelect">useSessionSelect</a></li><li><a href="global.html#useSetAge">useSetAge</a></li><li><a href="global.html#useSetFeeling">useSetFeeling</a></li><li><a href="global.html#useSetGender">useSetGender</a></li><li><a href="global.html#useSetGoals">useSetGoals</a></li><li><a href="global.html#useSetReccommend">useSetReccommend</a></li><li><a href="global.html#useSetThankyou">useSetThankyou</a></li><li><a href="global.html#useSettings">useSettings</a></li><li><a href="global.html#useSortPlaylist">useSortPlaylist</a></li><li><a href="global.html#useSoundSelect">useSoundSelect</a></li><li><a href="global.html#useStatistics">useStatistics</a></li><li><a href="global.html#useVideoContent">useVideoContent</a></li><li><a href="global.html#useVideoDetails">useVideoDetails</a></li><li><a href="global.html#useViewAll">useViewAll</a></li><li><a href="global.html#valid">valid</a></li><li><a href="global.html#verificationSaga">verificationSaga</a></li><li><a href="global.html#verificationSchema">verificationSchema</a></li><li><a href="global.html#verifyUserSaga">verifyUserSaga</a></li><li><a href="global.html#viewsFormatter">viewsFormatter</a></li><li><a href="global.html#writePermission">writePermission</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue Dec 05 2023 00:57:55 GMT+0500 (GMT+05:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

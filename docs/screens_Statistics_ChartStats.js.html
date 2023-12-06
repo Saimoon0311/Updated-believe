@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: screens/Statistics/ChartStats.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: screens/Statistics/ChartStats.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, {useState} from 'react';
+import {View, Text, StyleSheet, processColor, Platform} from 'react-native';
+import {BarChart} from 'react-native-charts-wrapper';
+import {Colors, FontFamily} from '../../theme/Variables';
+import {widthPercentageToDP} from 'react-native-responsive-screen';
+
+const WHITE = processColor(Colors.blurWhite);
+const GREEN = processColor(Colors.graphBlue);
+const DARKGREEN = processColor(Colors.darkGreen);
+let format1 = n => `${(n / 60) ^ 0}Hr ${n % 60}Min`;
+/**
+ * The ChartStats function is a React component that displays a bar chart with statistics data,
+ * including total time and daily values, and formats the data for the chart.
+ * @returns The code is returning a React component that renders a chart with statistics. The component
+ * takes two props, `total_minutes` and `stats`. It uses these props to calculate and display the total
+ * time and a bar chart representing the statistics.
+ **/
+const ChartStats = ({total_minutes, stats}) => {
+  const [barTimeMins, setBarTimeMins] = useState(0);
+  var values =
+    stats == undefined ? [] : stats?.map(obj => ({y: obj.duration / 3600}));
+  // : stats?.map(obj => ({y: Math.floor(obj.duration / 1440)}));
+  // : stats?.map(obj => ({y: Math.floor(obj.duration)}));
+  console.log('aaa123', values);
+
+  // --------------
+
+  /* The code `dataPoint => ({ y: dataPoint.y * 60 })` is a function that takes a data point as input
+  and returns an object with a modified `y` value. In this case, it multiplies the `y` value of each
+  data point by 60. This is done to convert the `y` values from hours to minutes. */
+  values = values.map(dataPoint => ({
+    y: dataPoint.y * 60,
+  }));
+
+  console.log('testss', values);
+
+  // find max value
+
+  let max_value = Number.NEGATIVE_INFINITY;
+
+  /* The `for...of` loop is iterating over each item in the `values` array. It assigns each item to the
+  variable `item` and executes the code block inside the loop for each item. */
+  for (const item of values) {
+    if ('y' in item) {
+      max_value = Math.max(max_value, item.y);
+      console.log(1 + 1, max_value);
+    }
+  }
+
+  const max_value_rounded = max_value.toFixed(2);
+
+  // --------------
+
+  /* The `data` object is used to configure the data for the BarChart component. */
+  const data = {
+    dataSets: [
+      {
+        values,
+        label: 'Zero line dataset',
+        config: {
+          colors: [GREEN],
+          drawValues: false,
+        },
+      },
+    ],
+    config: {
+      barWidth: 0.25,
+    },
+  };
+  console.log('stats', stats, data.dataSets[0].values);
+  return (
+    &lt;View style={styles.container}>
+      &lt;View style={styles.row}>
+        &lt;Text style={styles.title}>Total Time&lt;/Text>
+        &lt;Text style={styles.title}>{format1(total_minutes)}&lt;/Text>
+      &lt;/View>
+      &lt;Text style={styles.hr}>(mins)&lt;/Text>
+      &lt;BarChart
+        data={data}
+        style={styles.chart}
+        drawValueAboveBar={true}
+        chartDescription={{text: ''}}
+        xAxis={{
+          enabled: false,
+          drawLabels: false,
+        }}
+        // xAxis={{
+        //   enabled: true,
+        //   drawLabels: true,
+        //   axisLineWidth: 2,
+        //   drawAxisLines: true,
+        //   axisLineColor: DARKGREEN,
+        //   centerAxisLabels: true,
+        //   enabled: false,
+        // }}
+        yAxis={{
+          left: {
+            // valueFormatter: max_value_rounded + ' hr',
+            labelCount: 6,
+            yOffset: 1,
+            drawLabels: true,
+            drawAxisLine: true,
+            drawGridLines: false,
+            axisMaximum: max_value_rounded,
+            axisMinimum: 0,
+            // valueFormatter: max_value_rounded,
+            axisLineWidth: 1.5,
+            labelCountForce: true,
+            axisLineColor: DARKGREEN,
+            fontFamily: FontFamily.medium,
+            position: 'OUTSIDE_CHART',
+            textSize: 10,
+            textColor: WHITE,
+            zeroLine: {
+              enabled: true,
+              lineWidth: 1.5,
+              lineColor: DARKGREEN,
+            },
+          },
+          right: {
+            enabled: false,
+          },
+        }}
+        pinchZoom={false}
+        scaleYEnabled={false}
+        doubleTapToZoomEnabled={false}
+        animation={{
+          durationX: 1000,
+          durationY: 1000,
+          easingX: 'EaseOutBounce',
+          easingY: 'EaseOutBounce',
+        }}
+        highlightPerTapEnabled={false}
+        highlightFullBarEnabled={false}
+        highlightPerDragEnabled={false}
+        legend={{enabled: false}}
+      />
+
+      &lt;View style={styles.line} />
+      &lt;View style={styles.xAxisLabel}>
+        {stats?.map((obj, ind) => (
+          &lt;Text key={ind} style={styles.day}>
+            {obj?.day}
+            {/* {/ {moment(obj?.date).format('dddd')} /}
+            {/ {moment(obj?.date).format('ddd').substring(0, 3)} /} */}
+          &lt;/Text>
+        ))}
+      &lt;/View>
+    &lt;/View>
+  );
+};
+
+export default React.memo(ChartStats);
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    alignItems: 'center',
+    backgroundColor: Colors.transparent,
+    paddingBottom: 90,
+  },
+  chart: {
+    height: 200,
+    // height: '35%',
+    width: '95%',
+  },
+  button: {
+    marginHorizontal: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: Colors.lightGray,
+    backgroundColor: Colors.fadedGray,
+    borderRadius: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  text: {
+    fontSize: 16,
+    color: Colors.black,
+  },
+  row: {
+    width: '100%',
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingBottom: 10,
+  },
+  title: {
+    fontSize: 14,
+    color: Colors.white,
+    fontFamily: FontFamily.medium,
+  },
+  line: {
+    // borderTopWidth: 2,
+    // borderTopColor: Colors.darkGreen,
+    width: '85%',
+    marginTop: -14,
+  },
+  xAxisLabel: {
+    width: '74%',
+    paddingTop: 10,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  day: {
+    fontSize: 12,
+    textAlign: 'center',
+    color: Colors.blurWhite,
+    textTransform: 'uppercase',
+    fontFamily: FontFamily.medium,
+    paddingRight:
+      Platform.OS == 'ios'
+        ? widthPercentageToDP('4.8')
+        : widthPercentageToDP('5.2'),
+  },
+  hr: {
+    textAlign: 'left',
+    color: Colors.blurWhite,
+    alignSelf: 'flex-start',
+    marginLeft: 1,
+    fontFamily: FontFamily.medium,
+    textColor: WHITE,
+    fontSize: 12,
+  },
+});
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AuthService.html">AuthService</a></li><li><a href="ContentService.html">ContentService</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="SocialLogin.html">SocialLogin</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AMPMLayout">AMPMLayout</a></li><li><a href="global.html#Achievement">Achievement</a></li><li><a href="global.html#ChangePassword">ChangePassword</a></li><li><a href="global.html#ChartStats">ChartStats</a></li><li><a href="global.html#ContentLoading">ContentLoading</a></li><li><a href="global.html#EmptyComponent">EmptyComponent</a></li><li><a href="global.html#FontSize">FontSize</a></li><li><a href="global.html#Goals">Goals</a></li><li><a href="global.html#MainTabScreen">MainTabScreen</a></li><li><a href="global.html#OnboardStack">OnboardStack</a></li><li><a href="global.html#Onboarding">Onboarding</a></li><li><a href="global.html#PlayListEdit">PlayListEdit</a></li><li><a href="global.html#Schemas">Schemas</a></li><li><a href="global.html#Settings">Settings</a></li><li><a href="global.html#StreakSection">StreakSection</a></li><li><a href="global.html#SubscriptionsTest">SubscriptionsTest</a></li><li><a href="global.html#UseForget">UseForget</a></li><li><a href="global.html#UseLogin">UseLogin</a></li><li><a href="global.html#UseNewPassword">UseNewPassword</a></li><li><a href="global.html#UseRegister">UseRegister</a></li><li><a href="global.html#UseVerification">UseVerification</a></li><li><a href="global.html#ViewAll">ViewAll</a></li><li><a href="global.html#addMusicSaga">addMusicSaga</a></li><li><a href="global.html#addPlaylistScheme">addPlaylistScheme</a></li><li><a href="global.html#addToPlaylistSaga">addToPlaylistSaga</a></li><li><a href="global.html#appStreakSaga">appStreakSaga</a></li><li><a href="global.html#authLogout">authLogout</a></li><li><a href="global.html#authSaga">authSaga</a></li><li><a href="global.html#auth_reducer">auth_reducer</a></li><li><a href="global.html#cacheMedia">cacheMedia</a></li><li><a href="global.html#contentSaga">contentSaga</a></li><li><a href="global.html#contentTime">contentTime</a></li><li><a href="global.html#contentTimeWithOutSec">contentTimeWithOutSec</a></li><li><a href="global.html#content_reducer">content_reducer</a></li><li><a href="global.html#courseTimeView">courseTimeView</a></li><li><a href="global.html#createBranchLink">createBranchLink</a></li><li><a href="global.html#createPlaylistSaga">createPlaylistSaga</a></li><li><a href="global.html#deleteAllFiles">deleteAllFiles</a></li><li><a href="global.html#deleteFiles">deleteFiles</a></li><li><a href="global.html#deletePlaylistSaga">deletePlaylistSaga</a></li><li><a href="global.html#deviceStorage">deviceStorage</a></li><li><a href="global.html#durationAsString">durationAsString</a></li><li><a href="global.html#durationCall">durationCall</a></li><li><a href="global.html#editPlaylistSaga">editPlaylistSaga</a></li><li><a href="global.html#editProfileScheme">editProfileScheme</a></li><li><a href="global.html#eventDateView">eventDateView</a></li><li><a href="global.html#fcmTokenSaga">fcmTokenSaga</a></li><li><a href="global.html#file_reducer">file_reducer</a></li><li><a href="global.html#forgotSchema">forgotSchema</a></li><li><a href="global.html#forgotUserSaga">forgotUserSaga</a></li><li><a href="global.html#generateDiscountStr">generateDiscountStr</a></li><li><a href="global.html#generateSubViewObject">generateSubViewObject</a></li><li><a href="global.html#generateSubViewObjectAndroid">generateSubViewObjectAndroid</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#getAllBackgroundSaga">getAllBackgroundSaga</a></li><li><a href="global.html#getAllCategoryAndLibrariesSaga">getAllCategoryAndLibrariesSaga</a></li><li><a href="global.html#getAllContentLibrariesSaga">getAllContentLibrariesSaga</a></li><li><a href="global.html#getAllCoursesSaga">getAllCoursesSaga</a></li><li><a href="global.html#getAllFeelingsSaga">getAllFeelingsSaga</a></li><li><a href="global.html#getAllGoalsSaga">getAllGoalsSaga</a></li><li><a href="global.html#getAllHomeContentSaga">getAllHomeContentSaga</a></li><li><a href="global.html#getAllLibraryAudiosSaga">getAllLibraryAudiosSaga</a></li><li><a href="global.html#getAllLiveEventsSaga">getAllLiveEventsSaga</a></li><li><a href="global.html#getAllRemindersSaga">getAllRemindersSaga</a></li><li><a href="global.html#getAllReviewsSaga">getAllReviewsSaga</a></li><li><a href="global.html#getAllRingtonesSaga">getAllRingtonesSaga</a></li><li><a href="global.html#getAllScriptChaptersSaga">getAllScriptChaptersSaga</a></li><li><a href="global.html#getAllTracksSaga">getAllTracksSaga</a></li><li><a href="global.html#getAllVideosSaga">getAllVideosSaga</a></li><li><a href="global.html#getCourseLessons">getCourseLessons</a></li><li><a href="global.html#getCredentials">getCredentials</a></li><li><a href="global.html#getCurrentTimeWithFormat">getCurrentTimeWithFormat</a></li><li><a href="global.html#getDataRenewCat">getDataRenewCat</a></li><li><a href="global.html#getEBooksSaga">getEBooksSaga</a></li><li><a href="global.html#getFavoriteSaga">getFavoriteSaga</a></li><li><a href="global.html#getFbResult">getFbResult</a></li><li><a href="global.html#getFileExtension">getFileExtension</a></li><li><a href="global.html#getOnBoardToken">getOnBoardToken</a></li><li><a href="global.html#getPlaylistAudioSaga">getPlaylistAudioSaga</a></li><li><a href="global.html#getPlaylistSaga">getPlaylistSaga</a></li><li><a href="global.html#getRecentlySearch">getRecentlySearch</a></li><li><a href="global.html#getReminders">getReminders</a></li><li><a href="global.html#getScriptsSaga">getScriptsSaga</a></li><li><a href="global.html#getSearch">getSearch</a></li><li><a href="global.html#getSeriesSaga">getSeriesSaga</a></li><li><a href="global.html#getSuggestedData">getSuggestedData</a></li><li><a href="global.html#getUrlExtention">getUrlExtention</a></li><li><a href="global.html#getUserSaga">getUserSaga</a></li><li><a href="global.html#hit_Control">hit_Control</a></li><li><a href="global.html#initialState">initialState</a></li><li><a href="global.html#logInUpschema">logInUpschema</a></li><li><a href="global.html#logOutSaga">logOutSaga</a></li><li><a href="global.html#loginSaga">loginSaga</a></li><li><a href="global.html#loginUser">loginUser</a></li><li><a href="global.html#mediaPermission">mediaPermission</a></li><li><a href="global.html#meditationTimeView">meditationTimeView</a></li><li><a href="global.html#musicSaga">musicSaga</a></li><li><a href="global.html#onNotificationNotiFee">onNotificationNotiFee</a></li><li><a href="global.html#onShareFromApp">onShareFromApp</a></li><li><a href="global.html#permission">permission</a></li><li><a href="global.html#postReviewSaga">postReviewSaga</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#removeMusicSaga">removeMusicSaga</a></li><li><a href="global.html#removePlaylistAudioSaga">removePlaylistAudioSaga</a></li><li><a href="global.html#resetPasswordScheme">resetPasswordScheme</a></li><li><a href="global.html#resetUserEmail">resetUserEmail</a></li><li><a href="global.html#saveReminders">saveReminders</a></li><li><a href="global.html#secondsToTime">secondsToTime</a></li><li><a href="global.html#sendAudioViewCountSaga">sendAudioViewCountSaga</a></li><li><a href="global.html#sessionReducer">sessionReducer</a></li><li><a href="global.html#setAttributeRev">setAttributeRev</a></li><li><a href="global.html#shareStats">shareStats</a></li><li><a href="global.html#showError">showError</a></li><li><a href="global.html#showInfo">showInfo</a></li><li><a href="global.html#showSuccess">showSuccess</a></li><li><a href="global.html#signInWithFirebase">signInWithFirebase</a></li><li><a href="global.html#signUpSaga">signUpSaga</a></li><li><a href="global.html#socialLoginSaga">socialLoginSaga</a></li><li><a href="global.html#storeOnBoardToken">storeOnBoardToken</a></li><li><a href="global.html#timeLayout">timeLayout</a></li><li><a href="global.html#toggleFavoriteSaga">toggleFavoriteSaga</a></li><li><a href="global.html#toggleMusicSaga">toggleMusicSaga</a></li><li><a href="global.html#triggerReview">triggerReview</a></li><li><a href="global.html#updatePasswordSaga">updatePasswordSaga</a></li><li><a href="global.html#updatePlaylistAudioSaga">updatePlaylistAudioSaga</a></li><li><a href="global.html#updateProfileSaga">updateProfileSaga</a></li><li><a href="global.html#updateSubSaga">updateSubSaga</a></li><li><a href="global.html#useAddPlayListData">useAddPlayListData</a></li><li><a href="global.html#useAudioContent">useAudioContent</a></li><li><a href="global.html#useBackgroundSelect">useBackgroundSelect</a></li><li><a href="global.html#useBadges">useBadges</a></li><li><a href="global.html#useCourseDetail">useCourseDetail</a></li><li><a href="global.html#useCourses">useCourses</a></li><li><a href="global.html#useDownloads">useDownloads</a></li><li><a href="global.html#useEBooks">useEBooks</a></li><li><a href="global.html#useEditPlaylist">useEditPlaylist</a></li><li><a href="global.html#useEditProfile">useEditProfile</a></li><li><a href="global.html#useEvent">useEvent</a></li><li><a href="global.html#useFavorites">useFavorites</a></li><li><a href="global.html#useFinalize">useFinalize</a></li><li><a href="global.html#useGoals">useGoals</a></li><li><a href="global.html#useHome">useHome</a></li><li><a href="global.html#useIntroduction">useIntroduction</a></li><li><a href="global.html#useLibrary">useLibrary</a></li><li><a href="global.html#useLibraryDetails">useLibraryDetails</a></li><li><a href="global.html#useMe">useMe</a></li><li><a href="global.html#useMusicPlayer">useMusicPlayer</a></li><li><a href="global.html#useNotifications">useNotifications</a></li><li><a href="global.html#usePlaylistDetails">usePlaylistDetails</a></li><li><a href="global.html#useReadContent">useReadContent</a></li><li><a href="global.html#useReduxStore">useReduxStore</a></li><li><a href="global.html#useReminderDetail">useReminderDetail</a></li><li><a href="global.html#useReminders">useReminders</a></li><li><a href="global.html#useReviews">useReviews</a></li><li><a href="global.html#useScriptDetails">useScriptDetails</a></li><li><a href="global.html#useScripts">useScripts</a></li><li><a href="global.html#useSearch">useSearch</a></li><li><a href="global.html#useSeries">useSeries</a></li><li><a href="global.html#useSeriesDetails">useSeriesDetails</a></li><li><a href="global.html#useSessionSelect">useSessionSelect</a></li><li><a href="global.html#useSetAge">useSetAge</a></li><li><a href="global.html#useSetFeeling">useSetFeeling</a></li><li><a href="global.html#useSetGender">useSetGender</a></li><li><a href="global.html#useSetGoals">useSetGoals</a></li><li><a href="global.html#useSetReccommend">useSetReccommend</a></li><li><a href="global.html#useSetThankyou">useSetThankyou</a></li><li><a href="global.html#useSettings">useSettings</a></li><li><a href="global.html#useSortPlaylist">useSortPlaylist</a></li><li><a href="global.html#useSoundSelect">useSoundSelect</a></li><li><a href="global.html#useStatistics">useStatistics</a></li><li><a href="global.html#useVideoContent">useVideoContent</a></li><li><a href="global.html#useVideoDetails">useVideoDetails</a></li><li><a href="global.html#useViewAll">useViewAll</a></li><li><a href="global.html#valid">valid</a></li><li><a href="global.html#verificationSaga">verificationSaga</a></li><li><a href="global.html#verificationSchema">verificationSchema</a></li><li><a href="global.html#verifyUserSaga">verifyUserSaga</a></li><li><a href="global.html#viewsFormatter">viewsFormatter</a></li><li><a href="global.html#writePermission">writePermission</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue Dec 05 2023 00:57:55 GMT+0500 (GMT+05:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

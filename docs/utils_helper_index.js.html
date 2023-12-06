@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: utils/helper/index.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: utils/helper/index.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import auth from '@react-native-firebase/auth';
+import {Dirs, FileSystem} from 'react-native-file-access';
+import moment from 'moment';
+import {nanoid} from 'nanoid';
+import currency from 'currency.js';
+import Purchases from 'react-native-purchases';
+import API from '../../services/API';
+import TrackPlayer, {Capability, RepeatMode} from 'react-native-track-player';
+import {audioFile} from '../../store/sagas/music-saga';
+import {store} from '../../store/store';
+import Types from '../../store/saga-types';
+import {storeValue} from '../../services/storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+/**
+ * The function `getCredentials` returns different base URLs depending on whether the code is running
+ * in a development environment or not.
+ * @returns The function `getCredentials` returns an object with a `baseURL` property. The value of
+ * `baseURL` depends on the value of the `__DEV__` variable. If `__DEV__` is truthy, the `baseURL` is
+ * set to `'https://api.believehypnosis.app/api'`. Otherwise, if `__DEV__` is falsy,
+ */
+const getCredentials = () => {
+  if (__DEV__)
+    return {
+      baseURL: 'https://api.believehypnosis.app/api',
+      // baseURL: 'https://virtualrealitycreators.com/Believe-Backend/api',
+    };
+  else {
+    console.log = () => {};
+    return {
+      baseURL: 'https://api.believehypnosis.app/api',
+    };
+  }
+};
+
+/**
+ * The function `deviceStorage` returns the available storage space on the device.
+ */
+export const deviceStorage = () => FileSystem.df();
+
+/**
+ * The `loginUser` function takes an email and password as parameters and uses Firebase authentication
+ * to sign in the user.
+ */
+const loginUser = ({email, password}) =>
+  auth().signInWithEmailAndPassword(email, password);
+
+/**
+ * The function `registerUser` creates a new user with the provided email and password using Firebase
+ * authentication.
+ */
+const registerUser = ({email, password}) =>
+  auth().createUserWithEmailAndPassword(email, password);
+
+/**
+ * The function `resetUserEmail` sends a password reset email to the user's email address.
+ */
+const resetUserEmail = ({email}) => auth().sendPasswordResetEmail(email);
+
+/**
+ * The function signInWithFirebase takes in a data parameter and signs in the user with the provided
+ * credential.
+ */
+const signInWithFirebase = data => auth().signInWithCredential(data);
+
+/**
+ * The function `getFbResult` returns the ID token result of the current user.
+ */
+const getFbResult = () => auth().currentUser.getIdTokenResult();
+
+// Helper Functions
+
+const minuteCall = num => {
+  const duration = Number(Math.floor(num / 60));
+  return duration == 0 ? 1 : duration;
+};
+
+/**
+ * The function `durationCall` takes a duration in seconds and returns a formatted string representing
+ * the duration in hours and minutes.
+ * @returns The function `durationCall` returns a formatted string representing the duration. The
+ * format of the string depends on the values of `hour`, `minute`, and `second`. The possible return
+ * values are:
+ */
+const durationCall = duration => {
+  const hour = moment.utc(duration * 1000).format('HH');
+  const minute = moment.utc(duration * 1000).format('mm');
+  const second = moment.utc(duration * 1000).format('ss');
+  const checkHr = Boolean(hour != '00');
+  const checkMin = Boolean(minute != '00');
+  const checkSec = Boolean(second != '00');
+  if (!checkHr &amp;&amp; !checkMin &amp;&amp; !checkSec) return `${minute}:${second} min`;
+  else if (!checkHr &amp;&amp; !checkMin &amp;&amp; checkSec) return `${minute}:${second} min`;
+  else if (!checkHr &amp;&amp; checkMin &amp;&amp; !checkSec) return `${minute}:${second} min`;
+  else if (!checkHr &amp;&amp; checkMin &amp;&amp; checkSec) return `${minute}:${second} min`;
+  else if (checkHr &amp;&amp; checkMin &amp;&amp; checkSec) return `${hour}:${minute} hr`;
+  else if (checkHr &amp;&amp; !checkMin &amp;&amp; checkSec) return `${hour}:${minute} hr`;
+  else if (checkHr &amp;&amp; checkMin &amp;&amp; !checkSec) return `${hour}:${minute} hr`;
+  else if (checkHr &amp;&amp; !checkMin &amp;&amp; !checkSec) return `${hour}:${minute} hr`;
+};
+
+/**
+ * The function `courseTimeView` converts a given time in seconds into a formatted string representing
+ * the hours, minutes, and seconds.
+ * @returns The function `courseTimeView` returns a formatted string representing the time in hours,
+ * minutes, and seconds.
+ */
+const courseTimeView = time => {
+  const hour = moment.utc(time * 1000).format('HH');
+  const minute = moment.utc(time * 1000).format('mm');
+  const second = moment.utc(time * 1000).format('ss');
+  const checkHr = Boolean(hour != '00');
+  const checkMin = Boolean(minute != '00');
+  const checkSec = Boolean(second != '00');
+  if (!checkHr &amp;&amp; !checkMin &amp;&amp; !checkSec) return `${minute}min ${second}sec`;
+  else if (!checkHr &amp;&amp; !checkMin &amp;&amp; checkSec)
+    return `${minute}min ${second}sec`;
+  else if (!checkHr &amp;&amp; checkMin &amp;&amp; !checkSec)
+    return `${minute}min ${second}sec`;
+  else if (!checkHr &amp;&amp; checkMin &amp;&amp; checkSec) return `${minute}min ${second}sec`;
+  else if (checkHr &amp;&amp; checkMin &amp;&amp; checkSec) return `${hour}hr ${minute}min`;
+  else if (checkHr &amp;&amp; !checkMin &amp;&amp; checkSec) return `${hour}hr ${minute}min`;
+  else if (checkHr &amp;&amp; checkMin &amp;&amp; !checkSec) return `${hour}hr ${minute}min`;
+  else if (checkHr &amp;&amp; !checkMin &amp;&amp; !checkSec) return `${hour}hr ${minute}min`;
+};
+/**
+ * The function `meditationTimeView` takes a time in seconds and returns a formatted string
+ * representing the time in hours, minutes, and seconds.
+ * @returns The function `meditationTimeView` returns a formatted string representing the time in
+ * hours, minutes, and seconds.
+ */
+const meditationTimeView = time => {
+  const hour = moment.utc(time * 1000).format('HH');
+  const minute = moment.utc(time * 1000).format('mm');
+  const second = moment.utc(time * 1000).format('ss');
+  return `${hour}h ${minute}m ${second}s`;
+};
+
+/**
+ * The function `eventDateView` takes a date as input and returns a string indicating if the event is
+ * happening today, tomorrow, a week later, yesterday, or returns the original date if none of the
+ * conditions are met.
+ * @returns The function `eventDateView` returns a string representing the event date. The possible
+ * return values are:
+ */
+const eventDateView = date => {
+  let date_1 = new Date(date);
+  let date_2 = new Date();
+  const days = (date_1, date_2) => {
+    let difference = date_1.getTime() - date_2.getTime();
+    let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
+    return TotalDays;
+  };
+  const dateFiiter = days(date_1, date_2);
+  if (dateFiiter == 0) {
+    return `Today's Event`;
+  } else if (dateFiiter == 1) {
+    return `Tomorrow's Event`;
+  } else if (dateFiiter == 7) {
+    return `A Week Later`;
+  } else if (dateFiiter == -1) {
+    return `Yesterday's Event`;
+  } else {
+    return date;
+  }
+};
+
+/**
+ * The function `generateDiscountStr` takes a price string and a discount code as input, splits the
+ * price string to extract the price and currency, and returns a formatted string with the price
+ * divided by 12 and rounded to 2 decimal places.
+ * @param priceStr - The `priceStr` parameter is a string that represents the price of a product or
+ * service. It may contain a currency symbol, a space, and the price value. For example, it could be
+ * "USD 100" or "EUR 50".
+ * @param code - The `code` parameter is a variable that represents a discount code. It is not used in
+ * the `generateDiscountStr` function.
+ * @returns The function `generateDiscountStr` returns a string in the format `
+ * ${(Number(price?.split(',').join('')) / 12).toFixed(2)}/month`.
+ */
+const generateDiscountStr = (priceStr, code) => {
+  let array = priceStr?.split(/\s{1}/);
+  console.log('price string', priceStr);
+  const price = array?.length &amp;&amp; array[array?.length - 1];
+  const currency = array?.length &amp;&amp; array[array?.length - 2];
+  return `${currency} ${(Number(price?.split(',').join('')) / 12).toFixed(
+    2,
+  )}/month`;
+};
+
+/**
+ * The function `generateSubViewObject` generates a subview object with title, price, package title,
+ * and discount price based on the input subItem.
+ * @returns The function `generateSubViewObject` returns an object with the properties `title`,
+ * `price`, `packageTitle`, and `discountPrice`.
+ */
+const generateSubViewObject = subItem => {
+  let packageTitle = '';
+  let price = '';
+  let title = '';
+  let productId = '';
+  let discountPrice;
+
+  if (subItem?.platform == 'ios') {
+    packageTitle =
+      subItem?.subscriptionPeriodUnitIOS == 'MONTH' ? 'Monthly' : 'Yearly';
+    price = subItem?.price;
+    title = subItem?.title;
+    productId = subItem?.productId;
+    discountPrice = generateDiscountStr(price, subItem?.currency);
+  } else {
+    packageTitle =
+      subItem?.subscriptionOfferDetails[0]?.pricingPhases?.pricingPhaseList[0]
+        ?.billingPeriod == 'P1M'
+        ? 'Monthly'
+        : 'Yearly';
+    price =
+      subItem?.subscriptionOfferDetails[0]?.pricingPhases?.pricingPhaseList[0]
+        ?.formattedPrice;
+    title = subItem?.name;
+    productId = subItem?.productId;
+    discountPrice = generateDiscountStr(price);
+  }
+  return {
+    title,
+    price,
+    packageTitle,
+    discountPrice,
+  };
+};
+
+/**
+ * The function `onShareFromApp` makes a POST request to the `/unlock-badge` endpoint with the provided
+ * `badge` data.
+ */
+const onShareFromApp = async badge => {
+  await API.post('/unlock-badge', {badge});
+};
+
+/**
+ * The function generates a subview object for Android based on the provided subItem, index, and
+ * productIDs.
+ * @param subItem - An array containing the subscription details for a particular item.
+ * @param index - The `index` parameter represents the index of the subItem in the array. It is used to
+ * determine the packageTitle value, which is set to 'Monthly' if index is 0, and 'Yearly' otherwise.
+ * @param productIDs - The `productIDs` parameter is an object that contains the IDs of different
+ * products. It is used to retrieve the specific product ID based on the `packageTitle` value.
+ * @returns an object with the following properties:
+ */
+const generateSubViewObjectAndroid = (subItem, index, productIDs) => {
+  let packageTitle = '';
+  let price = '';
+  let title = '';
+  let offerToken = '';
+  let discountPrice;
+
+  packageTitle = index == 0 ? 'Monthly' : 'Yearly';
+  price =
+    subItem[0]?.subscriptionOfferDetails[index]?.pricingPhases
+      ?.pricingPhaseList[0]?.formattedPrice;
+  offerToken = subItem[0]?.subscriptionOfferDetails[index]?.offerToken;
+  discountPrice = generateDiscountStr(price);
+  return {
+    title,
+    price,
+    packageTitle,
+    discountPrice,
+    offerToken,
+    productId: productIDs[packageTitle],
+    subscriptionOfferDetails: subItem[0]?.subscriptionOfferDetails,
+  };
+};
+
+/**
+ * The function `viewsFormatter` takes a number as input and formats it to display in a shortened
+ * format with a suffix of B, M, or K depending on the magnitude of the number.
+ * @param num - The parameter `num` represents the number of views.
+ * @returns a formatted string representation of the input number. If the number is greater than or
+ * equal to 1 billion, it is divided by 1 billion and formatted with one decimal place, with any
+ * trailing ".0" removed, and the letter "B" appended. If the number is greater than or equal to 1
+ * million, it is divided by 1 million and formatted similarly with the
+ */
+function viewsFormatter(num) {
+  if (num >= 1000000000) {
+    return (num / 1000000000).toFixed(1).replace(/\.0$/, '') + 'B';
+  }
+  if (num >= 1000000) {
+    return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+  }
+  if (num >= 1000) {
+    return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+  }
+  return num;
+}
+
+const musicSwitch = async appMusic => {
+  try {
+    if (appMusic) {
+      await TrackPlayer.setRepeatMode(RepeatMode.Track);
+      await TrackPlayer.updateOptions({
+        stopWithApp: true,
+        capabilities: [Capability.Play, Capability.Pause, Capability.Stop],
+        compactCapabilities: [
+          Capability.Play,
+          Capability.Pause,
+          Capability.Stop,
+        ],
+      });
+      await TrackPlayer.add(audioFile);
+      await TrackPlayer.play();
+      await AsyncStorage.setItem('bgMusic', 'true');
+      return;
+    } else {
+      await TrackPlayer.reset();
+      await AsyncStorage.setItem('bgMusic', 'false');
+    }
+    store.dispatch({type: Types.Auth_Update, payload: {appMusic: true}});
+  } catch (error) {
+    console.log('on toggle music error', error);
+  }
+};
+
+/**
+ * The function getCurrentTimeWithFormat returns the current date in the format "YYYY-MM-DD".
+ * @returns The function `getCurrentTimeWithFormat` returns the current date in the format
+ * "YYYY-MM-DD".
+ */
+const getCurrentTimeWithFormat = () => {
+  const date = new Date();
+  var year = date.getFullYear();
+  var month = String(date.getMonth() + 1).padStart(2, '0');
+  var day = String(date.getDate()).padStart(2, '0');
+
+  var formattedDate = year + '-' + month + '-' + day;
+  return formattedDate;
+};
+
+/**
+ * The function `timeLayout` takes a time value and returns it formatted as "hh:mm A".
+ * @returns The function `timeLayout` returns a formatted time string in the format "hh:mm A".
+ */
+const timeLayout = time => {
+  return moment(time).format('hh:mm A');
+};
+
+/**
+ * The AMPMLayout function checks if the given time is between 6 AM and 6 PM.
+ * @returns a boolean value. It returns true if the hours of the given time parameter are between 6
+ * (inclusive) and 19 (exclusive), indicating that it is daytime. Otherwise, it returns false,
+ * indicating that it is nighttime.
+ */
+const AMPMLayout = time => {
+  const now = new Date(time);
+  const hours = now.getHours();
+  const minutes = now.getMinutes();
+  if (hours >= 6 &amp;&amp; hours &lt; 19) return true;
+  else return false;
+};
+
+/**
+ * The `contentTime` function formats a given time in seconds into a string representation of hours,
+ * minutes, and seconds.
+ * @param time - The `time` parameter represents a duration in seconds.
+ * @param [format=false] - A boolean value indicating whether to format the time as hours, minutes, and
+ * seconds or as a string in the format "HH:mm:ss".
+ * @returns The function `contentTime` returns a formatted string representing the time. If the
+ * `format` parameter is `false` or not provided, the function returns the time in the format
+ * "HH:mm:ss" (hours:minutes:seconds). If the `format` parameter is `true`, the function returns the
+ * time in a more human-readable format, such as "1 hour 30 minutes 45
+ */
+const contentTime = (time, format = false) => {
+  if (!format) {
+    const hour = moment.utc(time * 1000).format('HH');
+    const minute = moment.utc(time * 1000).format('mm');
+    const second = moment.utc(time * 1000).format('ss');
+    return hour == '00' ? `${minute}:${second}` : `${hour}:${minute}:${second}`;
+  }
+  const hour = moment.utc(time * 1000).format('HH');
+  const minute = moment.utc(time * 1000).format('mm');
+  const second = moment.utc(time * 1000).format('ss');
+  const hoursFormatted = hour !== '00' ? `${hour} hour ` : '';
+  const minutesFormatted = minute !== '00' ? `${minute} minutes ` : '';
+  const secondFormatted = second !== '00' ? `${second} seconds` : '';
+  return [hoursFormatted, minutesFormatted, secondFormatted].join('');
+};
+/**
+ * The function `contentTimeWithOutSec` formats a given time value in hours, minutes, and seconds, and
+ * optionally returns it in a specific format.
+ * @param time - The `time` parameter is a number representing the time in seconds.
+ * @param [format=false] - A boolean value indicating whether to format the time in hours and minutes
+ * or not. If set to true, the time will be formatted as "hours minutes", otherwise it will be
+ * formatted as "hours:minutes:seconds".
+ * @returns The function `contentTimeWithOutSec` returns a formatted string representing the time. If
+ * the `format` parameter is `false`, it returns the time in the format `HH:mm:ss`
+ * (hours:minutes:seconds). If the `format` parameter is `true`, it returns the time in a more
+ * human-readable format, such as `1 hour 30 minutes`.
+ */
+const contentTimeWithOutSec = (time, format = false) => {
+  if (!format) {
+    const hour = moment.utc(time * 1000).format('HH');
+    const minute = moment.utc(time * 1000).format('mm');
+    const second = moment.utc(time * 1000).format('ss');
+    return hour == '00' ? `${minute}:${second}` : `${hour}:${minute}:${second}`;
+  }
+  const hour = moment.utc(time * 1000).format('HH');
+  const minute = moment.utc(time * 1000).format('mm');
+  const second = moment.utc(time * 1000).format('ss');
+  const hoursFormatted = hour !== '00' ? `${hour} hour ` : '';
+  const minutesFormatted = minute !== '00' ? `${minute} minutes` : '';
+  const secondFormatted = second !== '00' ? `${second} seconds` : '';
+  return [hoursFormatted, minutesFormatted].join('');
+};
+
+/**
+ * The function `secondsToTime` converts a given time in seconds into hours, minutes, and seconds.
+ * @returns The function `secondsToTime` returns an object with three properties: `seconds`, `minutes`,
+ * and `hours`.
+ */
+export const secondsToTime = timeInSeconds => {
+  const hours = Math.floor(timeInSeconds / 3600)
+    .toString()
+    .padStart(2, '0');
+  const minutes = Math.floor((timeInSeconds % 3600) / 60)
+    .toString()
+    .padStart(2, '0');
+  const seconds = Math.floor(timeInSeconds % 60)
+    .toString()
+    .padStart(2, '0');
+  return {seconds, minutes, hours};
+};
+
+const randomNanoIdGenerator = () => nanoid();
+const keyExtractor = item => item?.id;
+
+/**
+ * The function `durationAsString` takes a date as input and returns the duration between the current
+ * time and the input date in the format of "X days X hours X minutes".
+ * @returns a string that represents the duration between the current date and the provided date in the
+ * format "X days X hours X minutes".
+ */
+const durationAsString = date => {
+  const start = new Date();
+  const currentTime = new Date(date);
+  currentTime.setDate(start.getDate());
+  if (start.getTime() > currentTime.getTime())
+    currentTime.setDate(start.getDate() + 1);
+
+  const duration = moment.duration(moment(currentTime).diff(moment(start)));
+
+  //Get Days
+  const days = Math.floor(duration.asDays()); // .asDays returns float but we are interested in full days only
+  const daysFormatted = days ? `${days}day ` : ''; // if no full days then do not display it at all
+
+  //Get Hours
+  const hours = duration.hours();
+  const hoursFormatted = hours ? `${hours}hr ` : '';
+
+  //Get Minutes
+  const minutes = duration.minutes();
+  const minutesFormatted = minutes ? `${minutes}min` : '';
+
+  return [daysFormatted, hoursFormatted, minutesFormatted].join('');
+};
+const skuIOS = ['3101202313', '31012023'];
+/**
+ * The function `getDataRenewCat` retrieves available subscription packages for a given revenuecat
+ * customer ID.
+ * @returns The function `getDataRenewCat` returns a promise that resolves to an object with the
+ * properties `ok` and `datas`. The `ok` property indicates whether the operation was successful or
+ * not, and the `datas` property contains an array with two elements: `yearlyPackages` and
+ * `monthlyPackages`.
+ */
+const getDataRenewCat = async revenuecat_customer_id => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const offerings = await Purchases.getOfferings();
+      console.log('packages', offerings);
+      const allProducts = offerings.current.availablePackages;
+      console.log('allProducts', allProducts);
+      const yearlyPackages = allProducts.filter(
+        res => res.product.subscriptionPeriod == 'P1Y',
+      )[0];
+      const monthlyPackages = allProducts.filter(
+        res => res.product.subscriptionPeriod == 'P1M',
+      )[0];
+      console.log('======>>>>>', yearlyPackages, monthlyPackages);
+      resolve({ok: true, datas: [yearlyPackages, monthlyPackages]});
+    } catch (e) {
+      reject({ok: false, datas: e});
+    }
+  });
+};
+
+/**
+ * The function `setAttributeRev` sets the email and display name attributes for a user in a Purchases
+ * object.
+ */
+const setAttributeRev = user => {
+  console.log('userdata ', user);
+  Purchases.setEmail(user?.email);
+  Purchases.setDisplayName(user?.name);
+  // Purchases.setAttributes({
+  //   'Package-Name': user.user_subscription.subscription_type,
+  //   // 'Package-Name': 'testinf',
+  // });
+};
+
+export {
+  getCredentials,
+  loginUser,
+  registerUser,
+  resetUserEmail,
+  signInWithFirebase,
+  getFbResult,
+  minuteCall,
+  durationCall,
+  courseTimeView,
+  meditationTimeView,
+  viewsFormatter,
+  eventDateView,
+  timeLayout,
+  AMPMLayout,
+  contentTime,
+  randomNanoIdGenerator,
+  keyExtractor,
+  durationAsString,
+  generateSubViewObject,
+  generateSubViewObjectAndroid,
+  generateDiscountStr,
+  getDataRenewCat,
+  setAttributeRev,
+  getCurrentTimeWithFormat,
+  contentTimeWithOutSec,
+  onShareFromApp,
+  musicSwitch,
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AuthService.html">AuthService</a></li><li><a href="ContentService.html">ContentService</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="SocialLogin.html">SocialLogin</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AMPMLayout">AMPMLayout</a></li><li><a href="global.html#Achievement">Achievement</a></li><li><a href="global.html#ChangePassword">ChangePassword</a></li><li><a href="global.html#ChartStats">ChartStats</a></li><li><a href="global.html#ContentLoading">ContentLoading</a></li><li><a href="global.html#EmptyComponent">EmptyComponent</a></li><li><a href="global.html#FontSize">FontSize</a></li><li><a href="global.html#Goals">Goals</a></li><li><a href="global.html#MainTabScreen">MainTabScreen</a></li><li><a href="global.html#OnboardStack">OnboardStack</a></li><li><a href="global.html#Onboarding">Onboarding</a></li><li><a href="global.html#PlayListEdit">PlayListEdit</a></li><li><a href="global.html#Schemas">Schemas</a></li><li><a href="global.html#Settings">Settings</a></li><li><a href="global.html#StreakSection">StreakSection</a></li><li><a href="global.html#SubscriptionsTest">SubscriptionsTest</a></li><li><a href="global.html#UseForget">UseForget</a></li><li><a href="global.html#UseLogin">UseLogin</a></li><li><a href="global.html#UseNewPassword">UseNewPassword</a></li><li><a href="global.html#UseRegister">UseRegister</a></li><li><a href="global.html#UseVerification">UseVerification</a></li><li><a href="global.html#ViewAll">ViewAll</a></li><li><a href="global.html#addMusicSaga">addMusicSaga</a></li><li><a href="global.html#addPlaylistScheme">addPlaylistScheme</a></li><li><a href="global.html#addToPlaylistSaga">addToPlaylistSaga</a></li><li><a href="global.html#appStreakSaga">appStreakSaga</a></li><li><a href="global.html#authLogout">authLogout</a></li><li><a href="global.html#authSaga">authSaga</a></li><li><a href="global.html#auth_reducer">auth_reducer</a></li><li><a href="global.html#cacheMedia">cacheMedia</a></li><li><a href="global.html#contentSaga">contentSaga</a></li><li><a href="global.html#contentTime">contentTime</a></li><li><a href="global.html#contentTimeWithOutSec">contentTimeWithOutSec</a></li><li><a href="global.html#content_reducer">content_reducer</a></li><li><a href="global.html#courseTimeView">courseTimeView</a></li><li><a href="global.html#createBranchLink">createBranchLink</a></li><li><a href="global.html#createPlaylistSaga">createPlaylistSaga</a></li><li><a href="global.html#deleteAllFiles">deleteAllFiles</a></li><li><a href="global.html#deleteFiles">deleteFiles</a></li><li><a href="global.html#deletePlaylistSaga">deletePlaylistSaga</a></li><li><a href="global.html#deviceStorage">deviceStorage</a></li><li><a href="global.html#durationAsString">durationAsString</a></li><li><a href="global.html#durationCall">durationCall</a></li><li><a href="global.html#editPlaylistSaga">editPlaylistSaga</a></li><li><a href="global.html#editProfileScheme">editProfileScheme</a></li><li><a href="global.html#eventDateView">eventDateView</a></li><li><a href="global.html#fcmTokenSaga">fcmTokenSaga</a></li><li><a href="global.html#file_reducer">file_reducer</a></li><li><a href="global.html#forgotSchema">forgotSchema</a></li><li><a href="global.html#forgotUserSaga">forgotUserSaga</a></li><li><a href="global.html#generateDiscountStr">generateDiscountStr</a></li><li><a href="global.html#generateSubViewObject">generateSubViewObject</a></li><li><a href="global.html#generateSubViewObjectAndroid">generateSubViewObjectAndroid</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#getAllBackgroundSaga">getAllBackgroundSaga</a></li><li><a href="global.html#getAllCategoryAndLibrariesSaga">getAllCategoryAndLibrariesSaga</a></li><li><a href="global.html#getAllContentLibrariesSaga">getAllContentLibrariesSaga</a></li><li><a href="global.html#getAllCoursesSaga">getAllCoursesSaga</a></li><li><a href="global.html#getAllFeelingsSaga">getAllFeelingsSaga</a></li><li><a href="global.html#getAllGoalsSaga">getAllGoalsSaga</a></li><li><a href="global.html#getAllHomeContentSaga">getAllHomeContentSaga</a></li><li><a href="global.html#getAllLibraryAudiosSaga">getAllLibraryAudiosSaga</a></li><li><a href="global.html#getAllLiveEventsSaga">getAllLiveEventsSaga</a></li><li><a href="global.html#getAllRemindersSaga">getAllRemindersSaga</a></li><li><a href="global.html#getAllReviewsSaga">getAllReviewsSaga</a></li><li><a href="global.html#getAllRingtonesSaga">getAllRingtonesSaga</a></li><li><a href="global.html#getAllScriptChaptersSaga">getAllScriptChaptersSaga</a></li><li><a href="global.html#getAllTracksSaga">getAllTracksSaga</a></li><li><a href="global.html#getAllVideosSaga">getAllVideosSaga</a></li><li><a href="global.html#getCourseLessons">getCourseLessons</a></li><li><a href="global.html#getCredentials">getCredentials</a></li><li><a href="global.html#getCurrentTimeWithFormat">getCurrentTimeWithFormat</a></li><li><a href="global.html#getDataRenewCat">getDataRenewCat</a></li><li><a href="global.html#getEBooksSaga">getEBooksSaga</a></li><li><a href="global.html#getFavoriteSaga">getFavoriteSaga</a></li><li><a href="global.html#getFbResult">getFbResult</a></li><li><a href="global.html#getFileExtension">getFileExtension</a></li><li><a href="global.html#getOnBoardToken">getOnBoardToken</a></li><li><a href="global.html#getPlaylistAudioSaga">getPlaylistAudioSaga</a></li><li><a href="global.html#getPlaylistSaga">getPlaylistSaga</a></li><li><a href="global.html#getRecentlySearch">getRecentlySearch</a></li><li><a href="global.html#getReminders">getReminders</a></li><li><a href="global.html#getScriptsSaga">getScriptsSaga</a></li><li><a href="global.html#getSearch">getSearch</a></li><li><a href="global.html#getSeriesSaga">getSeriesSaga</a></li><li><a href="global.html#getSuggestedData">getSuggestedData</a></li><li><a href="global.html#getUrlExtention">getUrlExtention</a></li><li><a href="global.html#getUserSaga">getUserSaga</a></li><li><a href="global.html#hit_Control">hit_Control</a></li><li><a href="global.html#initialState">initialState</a></li><li><a href="global.html#logInUpschema">logInUpschema</a></li><li><a href="global.html#logOutSaga">logOutSaga</a></li><li><a href="global.html#loginSaga">loginSaga</a></li><li><a href="global.html#loginUser">loginUser</a></li><li><a href="global.html#mediaPermission">mediaPermission</a></li><li><a href="global.html#meditationTimeView">meditationTimeView</a></li><li><a href="global.html#musicSaga">musicSaga</a></li><li><a href="global.html#onNotificationNotiFee">onNotificationNotiFee</a></li><li><a href="global.html#onShareFromApp">onShareFromApp</a></li><li><a href="global.html#permission">permission</a></li><li><a href="global.html#postReviewSaga">postReviewSaga</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#removeMusicSaga">removeMusicSaga</a></li><li><a href="global.html#removePlaylistAudioSaga">removePlaylistAudioSaga</a></li><li><a href="global.html#resetPasswordScheme">resetPasswordScheme</a></li><li><a href="global.html#resetUserEmail">resetUserEmail</a></li><li><a href="global.html#saveReminders">saveReminders</a></li><li><a href="global.html#secondsToTime">secondsToTime</a></li><li><a href="global.html#sendAudioViewCountSaga">sendAudioViewCountSaga</a></li><li><a href="global.html#sessionReducer">sessionReducer</a></li><li><a href="global.html#setAttributeRev">setAttributeRev</a></li><li><a href="global.html#shareStats">shareStats</a></li><li><a href="global.html#showError">showError</a></li><li><a href="global.html#showInfo">showInfo</a></li><li><a href="global.html#showSuccess">showSuccess</a></li><li><a href="global.html#signInWithFirebase">signInWithFirebase</a></li><li><a href="global.html#signUpSaga">signUpSaga</a></li><li><a href="global.html#socialLoginSaga">socialLoginSaga</a></li><li><a href="global.html#storeOnBoardToken">storeOnBoardToken</a></li><li><a href="global.html#timeLayout">timeLayout</a></li><li><a href="global.html#toggleFavoriteSaga">toggleFavoriteSaga</a></li><li><a href="global.html#toggleMusicSaga">toggleMusicSaga</a></li><li><a href="global.html#triggerReview">triggerReview</a></li><li><a href="global.html#updatePasswordSaga">updatePasswordSaga</a></li><li><a href="global.html#updatePlaylistAudioSaga">updatePlaylistAudioSaga</a></li><li><a href="global.html#updateProfileSaga">updateProfileSaga</a></li><li><a href="global.html#updateSubSaga">updateSubSaga</a></li><li><a href="global.html#useAddPlayListData">useAddPlayListData</a></li><li><a href="global.html#useAudioContent">useAudioContent</a></li><li><a href="global.html#useBackgroundSelect">useBackgroundSelect</a></li><li><a href="global.html#useBadges">useBadges</a></li><li><a href="global.html#useCourseDetail">useCourseDetail</a></li><li><a href="global.html#useCourses">useCourses</a></li><li><a href="global.html#useDownloads">useDownloads</a></li><li><a href="global.html#useEBooks">useEBooks</a></li><li><a href="global.html#useEditPlaylist">useEditPlaylist</a></li><li><a href="global.html#useEditProfile">useEditProfile</a></li><li><a href="global.html#useEvent">useEvent</a></li><li><a href="global.html#useFavorites">useFavorites</a></li><li><a href="global.html#useFinalize">useFinalize</a></li><li><a href="global.html#useGoals">useGoals</a></li><li><a href="global.html#useHome">useHome</a></li><li><a href="global.html#useIntroduction">useIntroduction</a></li><li><a href="global.html#useLibrary">useLibrary</a></li><li><a href="global.html#useLibraryDetails">useLibraryDetails</a></li><li><a href="global.html#useMe">useMe</a></li><li><a href="global.html#useMusicPlayer">useMusicPlayer</a></li><li><a href="global.html#useNotifications">useNotifications</a></li><li><a href="global.html#usePlaylistDetails">usePlaylistDetails</a></li><li><a href="global.html#useReadContent">useReadContent</a></li><li><a href="global.html#useReduxStore">useReduxStore</a></li><li><a href="global.html#useReminderDetail">useReminderDetail</a></li><li><a href="global.html#useReminders">useReminders</a></li><li><a href="global.html#useReviews">useReviews</a></li><li><a href="global.html#useScriptDetails">useScriptDetails</a></li><li><a href="global.html#useScripts">useScripts</a></li><li><a href="global.html#useSearch">useSearch</a></li><li><a href="global.html#useSeries">useSeries</a></li><li><a href="global.html#useSeriesDetails">useSeriesDetails</a></li><li><a href="global.html#useSessionSelect">useSessionSelect</a></li><li><a href="global.html#useSetAge">useSetAge</a></li><li><a href="global.html#useSetFeeling">useSetFeeling</a></li><li><a href="global.html#useSetGender">useSetGender</a></li><li><a href="global.html#useSetGoals">useSetGoals</a></li><li><a href="global.html#useSetReccommend">useSetReccommend</a></li><li><a href="global.html#useSetThankyou">useSetThankyou</a></li><li><a href="global.html#useSettings">useSettings</a></li><li><a href="global.html#useSortPlaylist">useSortPlaylist</a></li><li><a href="global.html#useSoundSelect">useSoundSelect</a></li><li><a href="global.html#useStatistics">useStatistics</a></li><li><a href="global.html#useVideoContent">useVideoContent</a></li><li><a href="global.html#useVideoDetails">useVideoDetails</a></li><li><a href="global.html#useViewAll">useViewAll</a></li><li><a href="global.html#valid">valid</a></li><li><a href="global.html#verificationSaga">verificationSaga</a></li><li><a href="global.html#verificationSchema">verificationSchema</a></li><li><a href="global.html#verifyUserSaga">verifyUserSaga</a></li><li><a href="global.html#viewsFormatter">viewsFormatter</a></li><li><a href="global.html#writePermission">writePermission</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue Dec 05 2023 00:57:55 GMT+0500 (GMT+05:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

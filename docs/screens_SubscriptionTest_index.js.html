@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: screens/SubscriptionTest/index.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: screens/SubscriptionTest/index.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import BadgeCard from '../../components/BadgeCard';
+import SafeView from '../../components/SafeView';
+import React, {Fragment, useEffect, useState} from 'react';
+import {View, Text, ImageBackground, ScrollView, Platform} from 'react-native';
+import Purchases from 'react-native-purchases';
+import {styles} from './styles';
+import * as Images from '../../Assets/Images';
+import SubscribeCardTest from '../../components/SubscribeCardTest';
+import NextButton from '../../components/NextButton';
+import SubscribeOffer from './subscribeOffer';
+import {showError} from '../../services/SnackBar';
+import {
+  generateDiscountStr,
+  getDataRenewCat,
+  setAttributeRev,
+} from '../../utils/helper';
+import {store} from '../../store/store';
+import API from '../../services/API';
+import useReduxStore from '../../hooks/useReduxStore';
+import {getUser, updateAuth, updateSub} from '../../store/actions/auth-action';
+import {heightPercentageToDP} from 'react-native-responsive-screen';
+import {storeValue} from '../../services/storage';
+
+// const skuIOS = ['AppStorePlans'];
+const skuIOS = ['3101202313', '31012023'];
+
+/**
+ * The SubscriptionsTest function is a React component that handles the subscription process, including
+ * displaying available plans, allowing the user to select a plan, and handling the purchase and
+ * validation of the selected plan.
+ * @returns The code is returning a React component that renders a subscription screen.
+ **/
+const SubscriptionsTest = ({navigation, route}) => {
+  const {getState, dispatch} = useReduxStore();
+  const {user} = getState('Auth');
+  const {trial_used} = user;
+
+  // const {revenuecat_customer_id} = user;
+  const [subscription, setSubscription] = useState([]);
+  const [marked, setMarked] = useState({});
+  const [plan, setPlan] = useState(false);
+  /**
+   * The function `getDataRenCat` retrieves data from a source called `getDataRenewCat`, sets the
+   * retrieved data as the subscription and marked values, and logs the retrieved data to the console.
+   **/
+  const getDataRenCat = async () => {
+    const {ok, datas} = await getDataRenewCat();
+    if (ok) {
+      setSubscription(datas);
+      setMarked(datas[0]);
+    }
+    console.log('data', datas);
+  };
+  const setMarkHandler = item => {
+    setMarked(item);
+  };
+
+  /**
+   * The function `onBackHandler` checks if the user is signing up and not subscribed, and if so,
+   * navigates to the 'Thankyou' screen, otherwise it goes back to the previous screen.
+   **/
+  const onBackHandler = () => {
+    const {params} = route;
+    const {user} = store.getState(state => state.Auth);
+    if (params?.isSignUp &amp;&amp; !user?.user?.is_subscribed)
+      navigation.replace('Thankyou', params);
+    else navigation.goBack();
+  };
+
+  /**
+   * The `subscribePlan` function handles the process of subscribing to a plan, including making a
+   * purchase, validating the receipt, and updating user data.
+   **/
+  const subscribePlan = async () => {
+    // Using packages
+    store.dispatch(updateAuth({loading: true}));
+    try {
+      // const purchaseMade = await Purchases.purchaseProduct(marked.identifier);
+
+      const {customerInfo} = await Purchases.purchasePackage(marked, {
+        prorationMode: Purchases.PRORATION_MODE.IMMEDIATE_WITHOUT_PRORATION,
+      });
+      const {activeSubscriptions, originalAppUserId} = customerInfo;
+      const selectedPlan = subscription.filter(
+        res => res.product.identifier == activeSubscriptions[0],
+      )[0];
+      const title = selectedPlan?.product?.title.split(' ')[0];
+
+      await API.post('/validate-receipt', {
+        platform: Platform.OS,
+        payload: {},
+        customer_id: customerInfo.originalAppUserId,
+      });
+      const userData = {
+        ...user,
+        revenuecat_customer_id: originalAppUserId,
+        user_subscription: {
+          change_possible: true,
+          subscription_type: title,
+        },
+        store: customerInfo.entitlements.active['AppStorePlans'].store,
+        is_subscribed: true,
+        subscribed: true,
+      };
+      storeValue('suscribe', 'true');
+      setAttributeRev(userData);
+      dispatch(updateSub(userData));
+      onBackHandler();
+    } catch (e) {
+      store.dispatch(updateAuth({loading: false}));
+      showError(
+        e.message.split(' ').slice(1).join(' ') || 'api request failed!',
+      );
+      if (!e.userCancelled) {
+        console.log('errr =====>>>>>', e);
+      }
+    }
+  };
+
+  /**
+   * The function "getCurrencySymbol" takes a price as input and returns the currency symbol by
+   * removing all digits, commas, and periods from the input string.
+   * @param price - The parameter "price" is a string representing a price value.
+   * @returns the currency symbol from the given price.
+   **/
+  function getCurrencySymbol(price) {
+    return price.replace(/[0-9,.]/g, '');
+  }
+
+  /**
+   * The function calculates the discounted monthly price and returns it as a formatted string with the
+   * currency symbol.
+   * @param price - The `price` parameter represents the original price of a product or service.
+   * @param priceString - The `priceString` parameter is a string that represents the currency symbol
+   * used for the price.
+   * @returns a string that represents the discounted monthly price, formatted with the currency symbol
+   * from the priceString parameter.
+   **/
+  const getDiscountPrice = (price, priceString) => {
+    const numMonths = 12;
+    const discountedMonthlyPrice = price / numMonths;
+    return `${getCurrencySymbol(priceString)}${discountedMonthlyPrice.toFixed(
+      2,
+    )}`;
+  };
+
+  /** The above code is written in JavaScript and is using the useEffect hook from React. **/
+  useEffect(async () => {
+    Purchases.addCustomerInfoUpdateListener(info => {
+      const {activeSubscriptions} = info;
+      console.log('========>>>>>', activeSubscriptions);
+    });
+    getDataRenCat();
+  }, []);
+  return (
+    &lt;ImageBackground
+      source={Images.subscription}
+      style={styles.backgroundImage}>
+      &lt;SafeView>
+        {/* &lt;RewardedAd
+          unitId={TestIds.REWARDED}
+          sizes={[BannerAdSize.FULL_BANNER]}
+          requestOptions={{
+            requestNonPersonalizedAdsOnly: true,
+          }}
+        /> */}
+        &lt;Text
+          onPress={onBackHandler}
+          style={[
+            styles.heading,
+            {
+              textAlign: 'right',
+              marginRight: 40,
+              // marginVertical: heightPercentageToDP('2'),
+              fontSize: heightPercentageToDP('2.5'),
+            },
+          ]}>
+          X
+        &lt;/Text>
+        &lt;ScrollView
+          contentContainerStyle={styles.container}
+          showsVerticalScrollIndicator={false}>
+          {/* {plan || trial_used == 1 ? ( */}
+          {plan ? (
+            &lt;Fragment>
+              &lt;Text
+                style={[styles.heading, {fontSize: heightPercentageToDP('4')}]}>
+                Unlock Believe Premium FREE!
+              &lt;/Text>
+              &lt;View style={styles.mainContainer}>
+                &lt;View style={styles.badgeBox}>
+                  &lt;BadgeCard
+                    {...{
+                      title: 'Speed Up Your Manifestations',
+                      icon: Images.checked,
+                    }}
+                  />
+
+                  &lt;BadgeCard
+                    {...{
+                      title: 'Access to 1000 + Powerful LOA Hypnosis Audios',
+                      icon: Images.checked,
+                    }}
+                  />
+                  &lt;BadgeCard
+                    {...{
+                      title: 'Members Only Personal Growth Courses',
+                      icon: Images.checked,
+                    }}
+                  />
+                  &lt;BadgeCard
+                    {...{
+                      title: 'Videos, Scripts, Live Events + Much More',
+                      icon: Images.checked,
+                    }}
+                  />
+                  &lt;BadgeCard
+                    {...{
+                      title: `Start Living a Happier, More Abundant Life Now`,
+                      icon: Images.checked,
+                    }}
+                  />
+                &lt;/View>
+              &lt;/View>
+              &lt;Text style={styles.planHeading}>Select Your Plan&lt;/Text>
+              &lt;Text
+                style={[
+                  styles.planHeading,
+                  {marginVertical: 0, textAlign: 'left', fontSize: 16},
+                ]}>
+                Best Value
+              &lt;/Text>
+              &lt;View
+                style={{
+                  flexDirection: 'row',
+                  marginTop: 10,
+                  marginBottom: 20,
+                }}>
+                {subscription.length > 0 &amp;&amp;
+                  subscription.map(res => {
+                    return (
+                      &lt;SubscribeCardTest
+                        {...{
+                          key: marked,
+                          item: res,
+                          marked,
+                          onPress: () => {},
+                          onPress: setMarkHandler,
+                          title: 'Annual - Billed \nat',
+                          trial: '14 Days free',
+                          discount: getDiscountPrice(
+                            res.product.price,
+                            res.product.priceString,
+                          ),
+                          traillUse: trial_used,
+                        }}
+                      />
+                    );
+                  })}
+
+                {/* &lt;SubscribeCardTest
+                  {...{
+                    key: marked,
+                    item: subscription[1],
+                    onPress: () => {},
+                    // onPress: this.setMarkHandler,
+                    marked,
+                    title: 'Monthly payment',
+                    discount: subscription[1]?.priceString,
+                    // trial: '11.99/month',
+                  }}
+                /> */}
+              &lt;/View>
+              &lt;View style={[styles.bottom, {flexDirection: 'column'}]}>
+                &lt;Text
+                  style={[
+                    styles.cancelHeading,
+                    {
+                      // opacity:
+                      //   marked?.product?.subscriptionPeriod == 'P1Y' ? 1 : 0,
+                      opacity: 1,
+                      // marked?.product?.subscriptionPeriod == 'P1Y' &amp;&amp;
+                      // trial_used == 0
+                      //   ? 1
+                      //   : 0,
+                    },
+                  ]}>
+                  {marked?.product?.subscriptionPeriod == 'P1Y'
+                    ? trial_used == 0 &amp;&amp;
+                      `14 days free trial then ${
+                        subscription.length > 0 &amp;&amp;
+                        subscription.find(
+                          res => res.product?.subscriptionPeriod == 'P1Y',
+                        ).product.priceString
+                      }/year. \n Cancel anytime`
+                    : `${
+                        subscription.length > 0 &amp;&amp;
+                        subscription.find(
+                          res => res.product?.subscriptionPeriod == 'P1M',
+                        ).product.priceString
+                      }/month. Cancel anytime`}
+                &lt;/Text>
+                &lt;NextButton
+                  disabled={!Boolean(marked?.identifier)}
+                  onPress={subscribePlan}
+                  buttonTitle="Continue"
+                />
+              &lt;/View>
+            &lt;/Fragment>
+          ) : (
+            &lt;SubscribeOffer
+              showPlan={() => setPlan(true)}
+              // price={generateSubViewObject(yearlyPkg).price}
+              price={marked?.product?.priceString}
+              onContinue={subscribePlan}
+              marked={marked?.product}
+              onBackHandler={() => onBackHandler()}
+            />
+            // revenuecat_customer_id == null &amp;&amp; (
+            //   &lt;SubscribeOffer
+            //     showPlan={() => setPlan(true)}
+            //     // price={generateSubViewObject(yearlyPkg).price}
+            //     price={marked?.product?.priceString}
+            //     onContinue={subscribePlan}
+            //     marked={marked.product}
+            //   />
+            // )
+          )}
+        &lt;/ScrollView>
+      &lt;/SafeView>
+    &lt;/ImageBackground>
+  );
+};
+
+export default SubscriptionsTest;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AuthService.html">AuthService</a></li><li><a href="ContentService.html">ContentService</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="SocialLogin.html">SocialLogin</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AMPMLayout">AMPMLayout</a></li><li><a href="global.html#Achievement">Achievement</a></li><li><a href="global.html#ChangePassword">ChangePassword</a></li><li><a href="global.html#ChartStats">ChartStats</a></li><li><a href="global.html#ContentLoading">ContentLoading</a></li><li><a href="global.html#EmptyComponent">EmptyComponent</a></li><li><a href="global.html#FontSize">FontSize</a></li><li><a href="global.html#Goals">Goals</a></li><li><a href="global.html#MainTabScreen">MainTabScreen</a></li><li><a href="global.html#OnboardStack">OnboardStack</a></li><li><a href="global.html#Onboarding">Onboarding</a></li><li><a href="global.html#PlayListEdit">PlayListEdit</a></li><li><a href="global.html#Schemas">Schemas</a></li><li><a href="global.html#Settings">Settings</a></li><li><a href="global.html#StreakSection">StreakSection</a></li><li><a href="global.html#SubscriptionsTest">SubscriptionsTest</a></li><li><a href="global.html#UseForget">UseForget</a></li><li><a href="global.html#UseLogin">UseLogin</a></li><li><a href="global.html#UseNewPassword">UseNewPassword</a></li><li><a href="global.html#UseRegister">UseRegister</a></li><li><a href="global.html#UseVerification">UseVerification</a></li><li><a href="global.html#ViewAll">ViewAll</a></li><li><a href="global.html#addMusicSaga">addMusicSaga</a></li><li><a href="global.html#addPlaylistScheme">addPlaylistScheme</a></li><li><a href="global.html#addToPlaylistSaga">addToPlaylistSaga</a></li><li><a href="global.html#appStreakSaga">appStreakSaga</a></li><li><a href="global.html#authLogout">authLogout</a></li><li><a href="global.html#authSaga">authSaga</a></li><li><a href="global.html#auth_reducer">auth_reducer</a></li><li><a href="global.html#cacheMedia">cacheMedia</a></li><li><a href="global.html#contentSaga">contentSaga</a></li><li><a href="global.html#contentTime">contentTime</a></li><li><a href="global.html#contentTimeWithOutSec">contentTimeWithOutSec</a></li><li><a href="global.html#content_reducer">content_reducer</a></li><li><a href="global.html#courseTimeView">courseTimeView</a></li><li><a href="global.html#createBranchLink">createBranchLink</a></li><li><a href="global.html#createPlaylistSaga">createPlaylistSaga</a></li><li><a href="global.html#deleteAllFiles">deleteAllFiles</a></li><li><a href="global.html#deleteFiles">deleteFiles</a></li><li><a href="global.html#deletePlaylistSaga">deletePlaylistSaga</a></li><li><a href="global.html#deviceStorage">deviceStorage</a></li><li><a href="global.html#durationAsString">durationAsString</a></li><li><a href="global.html#durationCall">durationCall</a></li><li><a href="global.html#editPlaylistSaga">editPlaylistSaga</a></li><li><a href="global.html#editProfileScheme">editProfileScheme</a></li><li><a href="global.html#eventDateView">eventDateView</a></li><li><a href="global.html#fcmTokenSaga">fcmTokenSaga</a></li><li><a href="global.html#file_reducer">file_reducer</a></li><li><a href="global.html#forgotSchema">forgotSchema</a></li><li><a href="global.html#forgotUserSaga">forgotUserSaga</a></li><li><a href="global.html#generateDiscountStr">generateDiscountStr</a></li><li><a href="global.html#generateSubViewObject">generateSubViewObject</a></li><li><a href="global.html#generateSubViewObjectAndroid">generateSubViewObjectAndroid</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#getAllBackgroundSaga">getAllBackgroundSaga</a></li><li><a href="global.html#getAllCategoryAndLibrariesSaga">getAllCategoryAndLibrariesSaga</a></li><li><a href="global.html#getAllContentLibrariesSaga">getAllContentLibrariesSaga</a></li><li><a href="global.html#getAllCoursesSaga">getAllCoursesSaga</a></li><li><a href="global.html#getAllFeelingsSaga">getAllFeelingsSaga</a></li><li><a href="global.html#getAllGoalsSaga">getAllGoalsSaga</a></li><li><a href="global.html#getAllHomeContentSaga">getAllHomeContentSaga</a></li><li><a href="global.html#getAllLibraryAudiosSaga">getAllLibraryAudiosSaga</a></li><li><a href="global.html#getAllLiveEventsSaga">getAllLiveEventsSaga</a></li><li><a href="global.html#getAllRemindersSaga">getAllRemindersSaga</a></li><li><a href="global.html#getAllReviewsSaga">getAllReviewsSaga</a></li><li><a href="global.html#getAllRingtonesSaga">getAllRingtonesSaga</a></li><li><a href="global.html#getAllScriptChaptersSaga">getAllScriptChaptersSaga</a></li><li><a href="global.html#getAllTracksSaga">getAllTracksSaga</a></li><li><a href="global.html#getAllVideosSaga">getAllVideosSaga</a></li><li><a href="global.html#getCourseLessons">getCourseLessons</a></li><li><a href="global.html#getCredentials">getCredentials</a></li><li><a href="global.html#getCurrentTimeWithFormat">getCurrentTimeWithFormat</a></li><li><a href="global.html#getDataRenewCat">getDataRenewCat</a></li><li><a href="global.html#getEBooksSaga">getEBooksSaga</a></li><li><a href="global.html#getFavoriteSaga">getFavoriteSaga</a></li><li><a href="global.html#getFbResult">getFbResult</a></li><li><a href="global.html#getFileExtension">getFileExtension</a></li><li><a href="global.html#getOnBoardToken">getOnBoardToken</a></li><li><a href="global.html#getPlaylistAudioSaga">getPlaylistAudioSaga</a></li><li><a href="global.html#getPlaylistSaga">getPlaylistSaga</a></li><li><a href="global.html#getRecentlySearch">getRecentlySearch</a></li><li><a href="global.html#getReminders">getReminders</a></li><li><a href="global.html#getScriptsSaga">getScriptsSaga</a></li><li><a href="global.html#getSearch">getSearch</a></li><li><a href="global.html#getSeriesSaga">getSeriesSaga</a></li><li><a href="global.html#getSuggestedData">getSuggestedData</a></li><li><a href="global.html#getUrlExtention">getUrlExtention</a></li><li><a href="global.html#getUserSaga">getUserSaga</a></li><li><a href="global.html#hit_Control">hit_Control</a></li><li><a href="global.html#initialState">initialState</a></li><li><a href="global.html#logInUpschema">logInUpschema</a></li><li><a href="global.html#logOutSaga">logOutSaga</a></li><li><a href="global.html#loginSaga">loginSaga</a></li><li><a href="global.html#loginUser">loginUser</a></li><li><a href="global.html#mediaPermission">mediaPermission</a></li><li><a href="global.html#meditationTimeView">meditationTimeView</a></li><li><a href="global.html#musicSaga">musicSaga</a></li><li><a href="global.html#onNotificationNotiFee">onNotificationNotiFee</a></li><li><a href="global.html#onShareFromApp">onShareFromApp</a></li><li><a href="global.html#permission">permission</a></li><li><a href="global.html#postReviewSaga">postReviewSaga</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#removeMusicSaga">removeMusicSaga</a></li><li><a href="global.html#removePlaylistAudioSaga">removePlaylistAudioSaga</a></li><li><a href="global.html#resetPasswordScheme">resetPasswordScheme</a></li><li><a href="global.html#resetUserEmail">resetUserEmail</a></li><li><a href="global.html#saveReminders">saveReminders</a></li><li><a href="global.html#secondsToTime">secondsToTime</a></li><li><a href="global.html#sendAudioViewCountSaga">sendAudioViewCountSaga</a></li><li><a href="global.html#sessionReducer">sessionReducer</a></li><li><a href="global.html#setAttributeRev">setAttributeRev</a></li><li><a href="global.html#shareStats">shareStats</a></li><li><a href="global.html#showError">showError</a></li><li><a href="global.html#showInfo">showInfo</a></li><li><a href="global.html#showSuccess">showSuccess</a></li><li><a href="global.html#signInWithFirebase">signInWithFirebase</a></li><li><a href="global.html#signUpSaga">signUpSaga</a></li><li><a href="global.html#socialLoginSaga">socialLoginSaga</a></li><li><a href="global.html#storeOnBoardToken">storeOnBoardToken</a></li><li><a href="global.html#timeLayout">timeLayout</a></li><li><a href="global.html#toggleFavoriteSaga">toggleFavoriteSaga</a></li><li><a href="global.html#toggleMusicSaga">toggleMusicSaga</a></li><li><a href="global.html#triggerReview">triggerReview</a></li><li><a href="global.html#updatePasswordSaga">updatePasswordSaga</a></li><li><a href="global.html#updatePlaylistAudioSaga">updatePlaylistAudioSaga</a></li><li><a href="global.html#updateProfileSaga">updateProfileSaga</a></li><li><a href="global.html#updateSubSaga">updateSubSaga</a></li><li><a href="global.html#useAddPlayListData">useAddPlayListData</a></li><li><a href="global.html#useAudioContent">useAudioContent</a></li><li><a href="global.html#useBackgroundSelect">useBackgroundSelect</a></li><li><a href="global.html#useBadges">useBadges</a></li><li><a href="global.html#useCourseDetail">useCourseDetail</a></li><li><a href="global.html#useCourses">useCourses</a></li><li><a href="global.html#useDownloads">useDownloads</a></li><li><a href="global.html#useEBooks">useEBooks</a></li><li><a href="global.html#useEditPlaylist">useEditPlaylist</a></li><li><a href="global.html#useEditProfile">useEditProfile</a></li><li><a href="global.html#useEvent">useEvent</a></li><li><a href="global.html#useFavorites">useFavorites</a></li><li><a href="global.html#useFinalize">useFinalize</a></li><li><a href="global.html#useGoals">useGoals</a></li><li><a href="global.html#useHome">useHome</a></li><li><a href="global.html#useIntroduction">useIntroduction</a></li><li><a href="global.html#useLibrary">useLibrary</a></li><li><a href="global.html#useLibraryDetails">useLibraryDetails</a></li><li><a href="global.html#useMe">useMe</a></li><li><a href="global.html#useMusicPlayer">useMusicPlayer</a></li><li><a href="global.html#useNotifications">useNotifications</a></li><li><a href="global.html#usePlaylistDetails">usePlaylistDetails</a></li><li><a href="global.html#useReadContent">useReadContent</a></li><li><a href="global.html#useReduxStore">useReduxStore</a></li><li><a href="global.html#useReminderDetail">useReminderDetail</a></li><li><a href="global.html#useReminders">useReminders</a></li><li><a href="global.html#useReviews">useReviews</a></li><li><a href="global.html#useScriptDetails">useScriptDetails</a></li><li><a href="global.html#useScripts">useScripts</a></li><li><a href="global.html#useSearch">useSearch</a></li><li><a href="global.html#useSeries">useSeries</a></li><li><a href="global.html#useSeriesDetails">useSeriesDetails</a></li><li><a href="global.html#useSessionSelect">useSessionSelect</a></li><li><a href="global.html#useSetAge">useSetAge</a></li><li><a href="global.html#useSetFeeling">useSetFeeling</a></li><li><a href="global.html#useSetGender">useSetGender</a></li><li><a href="global.html#useSetGoals">useSetGoals</a></li><li><a href="global.html#useSetReccommend">useSetReccommend</a></li><li><a href="global.html#useSetThankyou">useSetThankyou</a></li><li><a href="global.html#useSettings">useSettings</a></li><li><a href="global.html#useSortPlaylist">useSortPlaylist</a></li><li><a href="global.html#useSoundSelect">useSoundSelect</a></li><li><a href="global.html#useStatistics">useStatistics</a></li><li><a href="global.html#useVideoContent">useVideoContent</a></li><li><a href="global.html#useVideoDetails">useVideoDetails</a></li><li><a href="global.html#useViewAll">useViewAll</a></li><li><a href="global.html#valid">valid</a></li><li><a href="global.html#verificationSaga">verificationSaga</a></li><li><a href="global.html#verificationSchema">verificationSchema</a></li><li><a href="global.html#verifyUserSaga">verifyUserSaga</a></li><li><a href="global.html#viewsFormatter">viewsFormatter</a></li><li><a href="global.html#writePermission">writePermission</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue Dec 05 2023 00:57:55 GMT+0500 (GMT+05:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

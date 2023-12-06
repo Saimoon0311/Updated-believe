@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: screens/Me/useMe.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: screens/Me/useMe.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import useReduxStore from '../../hooks/useReduxStore';
+import {
+  getUser,
+  logOutUser,
+  updateAuth,
+  updateSub,
+} from '../../store/actions/auth-action';
+import InAppReview from 'react-native-in-app-review';
+import {Alert, Linking, Platform} from 'react-native';
+import cache from '../../utils/helper/cache';
+import {deleteAllFiles} from '../../services/DownloadServices';
+import {showError, showSuccess} from '../../services/SnackBar';
+import {useEffect, useState} from 'react';
+import Purchases from 'react-native-purchases';
+import {
+  believePackagsAndroidSKU,
+  believePackagsIosSKU,
+} from '../../utils/helper/LocalDb';
+import {storeValue} from '../../services/storage';
+import API from '../../services/API';
+import {onShareFromApp} from '../../utils/helper';
+
+/**
+ * The function `triggerReview` checks if the InAppReview feature is available, and if so, triggers the
+ * UI for the in-app review process and logs the result.
+ * @returns The function `triggerReview` does not explicitly return anything.
+ **/
+export const triggerReview = () => {
+  if (!InAppReview.isAvailable) return;
+
+  // trigger UI InAppreview
+  InAppReview.RequestInAppReview()
+    .then(hasFlowFinishedSuccessfully => {
+      // when return true in android it means user finished or close review flow
+      console.log('InAppReview in android', hasFlowFinishedSuccessfully);
+
+      // when return true in ios it means review flow lanuched to user.
+      console.log(
+        'InAppReview in ios has launched successfully',
+        hasFlowFinishedSuccessfully,
+      );
+
+      // 1- you have option to do something ex: (navigate Home page) (in android).
+      // 2- you have option to do something,
+      // ex: (save date today to lanuch InAppReview after 15 days) (in android and ios).
+
+      // 3- another option:
+      if (hasFlowFinishedSuccessfully) {
+        setTimeout(() => {
+          onShareFromApp(
+            Platform.OS == 'ios' ? 'AppStoreReviewer' : 'InAppReviewer',
+          );
+        }, 2000);
+
+        console.log('DONe');
+        // do something for ios
+        // do something for android
+      }
+
+      // for android:
+      // The flow has finished. The API does not indicate whether the user
+      // reviewed or not, or even whether the review dialog was shown. Thus, no
+      // matter the result, we continue our app flow.
+
+      // for ios
+      // the flow lanuched successfully, The API does not indicate whether the user
+      // reviewed or not, or he/she closed flow yet as android, Thus, no
+      // matter the result, we continue our app flow.
+    })
+    .catch(error => {
+      //we continue our app flow.
+      // we have some error could happen while lanuching InAppReview,
+      // Check table for errors and code number that can return in catch.
+      console.log('sdfsdfsdfsfs', error);
+      showSuccess(error ?? 'some error from the store');
+    });
+};
+
+/**
+ * The `useMe` function is a custom hook that provides various functionalities related to user
+ * authentication and data manipulation, such as logging out, deleting downloaded content, restoring
+ * purchases, and refreshing user data.
+ * @returns The `useMe` function is returning an object with the following properties:
+ **/
+const useMe = ({navigate, addListener}) => {
+  /** The line `const {getState, dispatch} = useReduxStore();` is using the `useReduxStore` hook to get
+  the `getState` and `dispatch` functions from the Redux store. **/
+  const {getState, dispatch} = useReduxStore();
+
+  /** The line `const user2 = getState('Auth');` is retrieving the user data from the Redux store. It is
+  using the `getState` function from the `useReduxStore` hook to get the state of the 'Auth' slice
+  of the Redux store. The 'Auth' slice likely contains information about the authenticated user,
+  such as their name, email, and subscription status. The `user2` variable is then used in other
+  parts of the code to access and manipulate the user data. **/
+  const user2 = getState('Auth');
+
+  console.log('user2user2user2user2user2user2', user2);
+
+  /**
+   * The logOutHandler function logs out the user, updates the 'subscribe' value to 'false', and
+   * dispatches the logOutUser action.
+   **/
+  const logOutHandler = async () => {
+    await API.get('/logout');
+    storeValue('suscribe', 'false');
+    dispatch(logOutUser());
+  };
+  const [audioPath, setAudioPath] = useState([]);
+  const [imagePath, setImagePath] = useState([]);
+
+  /**
+   * The showAlert function displays an alert dialog asking the user if they want to delete all
+   * downloaded content, and performs the deletion if the user chooses to proceed.
+   **/
+  const showAlert = () => {
+    Alert.alert(
+      'Clear Downloads',
+      'Are you sure you want to delete all downloaded content?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {text: 'OK', onPress: () => deleteDownloads()},
+      ],
+    );
+  };
+
+  /**
+   * The function `deleteDownloads` deletes all downloaded files and displays a success message if
+   * successful, or an error message if no downloads are found.
+   **/
+  const deleteDownloads = async type => {
+    try {
+      const downloadFiles = cache.get('downloadedFiles');
+      if (downloadFiles != null &amp;&amp; downloadFiles.length > 0) {
+        await downloadFiles.map(res => {
+          imagePath.push(res.cover_image || res.image);
+        });
+        await downloadFiles.map(res => {
+          audioPath.push(res.path);
+        });
+        await deleteAllFiles(imagePath);
+        await deleteAllFiles(audioPath);
+        cache.store('downloadedFiles', []);
+        !type &amp;&amp; showSuccess('All download file has been deleted');
+      } else !type &amp;&amp; showError('No downloads found!');
+    } catch (error) {
+      console.log('25', error);
+    }
+  };
+
+  /**
+   * The function `onRefresh` dispatches a `getUser` action.
+   **/
+  const onRefresh = () => dispatch(getUser());
+
+  /** The `useEffect` hook is used to perform side effects in a functional component. In this case, the
+`useEffect` hook is being used to add an event listener to the component when it is focused. **/
+  useEffect(() => {
+    const event = addListener('focus', () => onRefresh());
+    return event;
+  }, []);
+
+  /**
+   * The function "onRestore" is an asynchronous function.
+   **/
+  const onRestore = async () => {
+    updateAuth({loading: true});
+    console.log('djsbjkbdsjkvbdjksbvjkbdsbdsjvds', user2);
+    try {
+      const restore = await Purchases.restorePurchases();
+      console.log(
+        "restore.entitlements.active['AppStorePlsdasdasdasans']restore.entitlements.active['AppStorePlans']restore.entitlements.active['AppStorePlans']",
+        restore.entitlements.active['AppStorePlans'],
+      );
+
+      /** The condition `if (restore.entitlements.active['AppStorePlans'] != undefined)` is checking if
+      the 'AppStorePlans' entitlement is active in the restored purchases. **/
+      if (restore.entitlements.active['AppStorePlans'] != undefined) {
+        console.log('skjdbjbsdjkcbsdkjbcskjdb');
+        var platform =
+          Platform.OS == 'ios'
+            ? believePackagsIosSKU[0]
+            : believePackagsAndroidSKU[0];
+        var title =
+          restore.entitlements.active['AppStorePlans'].productIdentifier ==
+          platform
+            ? 'Yearly'
+            : 'Monthly';
+
+        const {data} = await API.post('/set-restore-identifier', {
+          identifier:
+            restore.entitlements.active['AppStorePlans'].productIdentifier,
+          rev_id: restore.originalAppUserId,
+        });
+
+        userData = {
+          ...user2.user,
+          user_subscription: {
+            change_possible: true,
+            subscription_type: title,
+          },
+          subscribed: true,
+          is_subscribed: true,
+          store: restore.entitlements.active['AppStorePlans'].store,
+          identifer:
+            restore.entitlements.active['AppStorePlans'].productIdentifier,
+        };
+        let user = {...user2, ...userData};
+        storeValue('suscribe', 'true');
+        /** The line `dispatch(updateAuth({user}));` is dispatching an action to update the
+        authentication state in the Redux store. **/
+
+        dispatch(updateAuth({user}));
+        updateAuth({loading: false});
+      }
+    } catch (e) {
+      showError('failed to fatech data');
+      updateAuth({loading: false});
+      console.log('e', e);
+    }
+  };
+
+  /**
+   * The function `restorePurchase` displays an alert asking the user if they want to restore their
+   * purchase, and if the user confirms, it updates the authentication state and calls the `onRestore`
+   * function.
+   **/
+  const restorePurchase = () => {
+    Alert.alert('Warning', 'Are you sure you want to restore your purchase?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: 'OK',
+        onPress: async () => {
+          updateAuth({loading: true});
+          await onRestore();
+        },
+      },
+    ]);
+  };
+
+  // const helpRoute = async () => {
+  //   try {
+  //     await Linking.openURL('mailto:orders@hyptalk.com');
+  //     console.log('success');
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //   }
+  // };
+
+  const helpRoute = () => {
+    {
+      Platform.OS === 'ios'
+        ? Linking.openURL(
+            'mailto:orders@hyptalk.com?subject=Help%20and%20Support%20-%20Believe%20App',
+          )
+            .then(() => console.log('Mail client opened successfully'))
+            .catch(err => console.error('Error opening mail client:', err))
+        : Linking.openURL(
+            'mailto:orders@hyptalk.com?subject=Help and Support - Believe App',
+          )
+            .then(() => console.log('Mail client opened successfully'))
+            .catch(err => console.error('Error opening mail client:', err));
+    }
+  };
+
+  return {
+    user: user2,
+    logOutHandler,
+    helpRoute,
+    triggerReview,
+    deleteDownloads: showAlert,
+    restorePurchase,
+    onRefresh,
+  };
+};
+
+export default useMe;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AuthService.html">AuthService</a></li><li><a href="ContentService.html">ContentService</a></li><li><a href="Navigation.html">Navigation</a></li><li><a href="SocialLogin.html">SocialLogin</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AMPMLayout">AMPMLayout</a></li><li><a href="global.html#Achievement">Achievement</a></li><li><a href="global.html#ChangePassword">ChangePassword</a></li><li><a href="global.html#ChartStats">ChartStats</a></li><li><a href="global.html#ContentLoading">ContentLoading</a></li><li><a href="global.html#EmptyComponent">EmptyComponent</a></li><li><a href="global.html#FontSize">FontSize</a></li><li><a href="global.html#Goals">Goals</a></li><li><a href="global.html#MainTabScreen">MainTabScreen</a></li><li><a href="global.html#OnboardStack">OnboardStack</a></li><li><a href="global.html#Onboarding">Onboarding</a></li><li><a href="global.html#PlayListEdit">PlayListEdit</a></li><li><a href="global.html#Schemas">Schemas</a></li><li><a href="global.html#Settings">Settings</a></li><li><a href="global.html#StreakSection">StreakSection</a></li><li><a href="global.html#SubscriptionsTest">SubscriptionsTest</a></li><li><a href="global.html#UseForget">UseForget</a></li><li><a href="global.html#UseLogin">UseLogin</a></li><li><a href="global.html#UseNewPassword">UseNewPassword</a></li><li><a href="global.html#UseRegister">UseRegister</a></li><li><a href="global.html#UseVerification">UseVerification</a></li><li><a href="global.html#ViewAll">ViewAll</a></li><li><a href="global.html#addMusicSaga">addMusicSaga</a></li><li><a href="global.html#addPlaylistScheme">addPlaylistScheme</a></li><li><a href="global.html#addToPlaylistSaga">addToPlaylistSaga</a></li><li><a href="global.html#appStreakSaga">appStreakSaga</a></li><li><a href="global.html#authLogout">authLogout</a></li><li><a href="global.html#authSaga">authSaga</a></li><li><a href="global.html#auth_reducer">auth_reducer</a></li><li><a href="global.html#cacheMedia">cacheMedia</a></li><li><a href="global.html#contentSaga">contentSaga</a></li><li><a href="global.html#contentTime">contentTime</a></li><li><a href="global.html#contentTimeWithOutSec">contentTimeWithOutSec</a></li><li><a href="global.html#content_reducer">content_reducer</a></li><li><a href="global.html#courseTimeView">courseTimeView</a></li><li><a href="global.html#createBranchLink">createBranchLink</a></li><li><a href="global.html#createPlaylistSaga">createPlaylistSaga</a></li><li><a href="global.html#deleteAllFiles">deleteAllFiles</a></li><li><a href="global.html#deleteFiles">deleteFiles</a></li><li><a href="global.html#deletePlaylistSaga">deletePlaylistSaga</a></li><li><a href="global.html#deviceStorage">deviceStorage</a></li><li><a href="global.html#durationAsString">durationAsString</a></li><li><a href="global.html#durationCall">durationCall</a></li><li><a href="global.html#editPlaylistSaga">editPlaylistSaga</a></li><li><a href="global.html#editProfileScheme">editProfileScheme</a></li><li><a href="global.html#eventDateView">eventDateView</a></li><li><a href="global.html#fcmTokenSaga">fcmTokenSaga</a></li><li><a href="global.html#file_reducer">file_reducer</a></li><li><a href="global.html#forgotSchema">forgotSchema</a></li><li><a href="global.html#forgotUserSaga">forgotUserSaga</a></li><li><a href="global.html#generateDiscountStr">generateDiscountStr</a></li><li><a href="global.html#generateSubViewObject">generateSubViewObject</a></li><li><a href="global.html#generateSubViewObjectAndroid">generateSubViewObjectAndroid</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#getAllBackgroundSaga">getAllBackgroundSaga</a></li><li><a href="global.html#getAllCategoryAndLibrariesSaga">getAllCategoryAndLibrariesSaga</a></li><li><a href="global.html#getAllContentLibrariesSaga">getAllContentLibrariesSaga</a></li><li><a href="global.html#getAllCoursesSaga">getAllCoursesSaga</a></li><li><a href="global.html#getAllFeelingsSaga">getAllFeelingsSaga</a></li><li><a href="global.html#getAllGoalsSaga">getAllGoalsSaga</a></li><li><a href="global.html#getAllHomeContentSaga">getAllHomeContentSaga</a></li><li><a href="global.html#getAllLibraryAudiosSaga">getAllLibraryAudiosSaga</a></li><li><a href="global.html#getAllLiveEventsSaga">getAllLiveEventsSaga</a></li><li><a href="global.html#getAllRemindersSaga">getAllRemindersSaga</a></li><li><a href="global.html#getAllReviewsSaga">getAllReviewsSaga</a></li><li><a href="global.html#getAllRingtonesSaga">getAllRingtonesSaga</a></li><li><a href="global.html#getAllScriptChaptersSaga">getAllScriptChaptersSaga</a></li><li><a href="global.html#getAllTracksSaga">getAllTracksSaga</a></li><li><a href="global.html#getAllVideosSaga">getAllVideosSaga</a></li><li><a href="global.html#getCourseLessons">getCourseLessons</a></li><li><a href="global.html#getCredentials">getCredentials</a></li><li><a href="global.html#getCurrentTimeWithFormat">getCurrentTimeWithFormat</a></li><li><a href="global.html#getDataRenewCat">getDataRenewCat</a></li><li><a href="global.html#getEBooksSaga">getEBooksSaga</a></li><li><a href="global.html#getFavoriteSaga">getFavoriteSaga</a></li><li><a href="global.html#getFbResult">getFbResult</a></li><li><a href="global.html#getFileExtension">getFileExtension</a></li><li><a href="global.html#getOnBoardToken">getOnBoardToken</a></li><li><a href="global.html#getPlaylistAudioSaga">getPlaylistAudioSaga</a></li><li><a href="global.html#getPlaylistSaga">getPlaylistSaga</a></li><li><a href="global.html#getRecentlySearch">getRecentlySearch</a></li><li><a href="global.html#getReminders">getReminders</a></li><li><a href="global.html#getScriptsSaga">getScriptsSaga</a></li><li><a href="global.html#getSearch">getSearch</a></li><li><a href="global.html#getSeriesSaga">getSeriesSaga</a></li><li><a href="global.html#getSuggestedData">getSuggestedData</a></li><li><a href="global.html#getUrlExtention">getUrlExtention</a></li><li><a href="global.html#getUserSaga">getUserSaga</a></li><li><a href="global.html#hit_Control">hit_Control</a></li><li><a href="global.html#initialState">initialState</a></li><li><a href="global.html#logInUpschema">logInUpschema</a></li><li><a href="global.html#logOutSaga">logOutSaga</a></li><li><a href="global.html#loginSaga">loginSaga</a></li><li><a href="global.html#loginUser">loginUser</a></li><li><a href="global.html#mediaPermission">mediaPermission</a></li><li><a href="global.html#meditationTimeView">meditationTimeView</a></li><li><a href="global.html#musicSaga">musicSaga</a></li><li><a href="global.html#onNotificationNotiFee">onNotificationNotiFee</a></li><li><a href="global.html#onShareFromApp">onShareFromApp</a></li><li><a href="global.html#permission">permission</a></li><li><a href="global.html#postReviewSaga">postReviewSaga</a></li><li><a href="global.html#registerUser">registerUser</a></li><li><a href="global.html#removeMusicSaga">removeMusicSaga</a></li><li><a href="global.html#removePlaylistAudioSaga">removePlaylistAudioSaga</a></li><li><a href="global.html#resetPasswordScheme">resetPasswordScheme</a></li><li><a href="global.html#resetUserEmail">resetUserEmail</a></li><li><a href="global.html#saveReminders">saveReminders</a></li><li><a href="global.html#secondsToTime">secondsToTime</a></li><li><a href="global.html#sendAudioViewCountSaga">sendAudioViewCountSaga</a></li><li><a href="global.html#sessionReducer">sessionReducer</a></li><li><a href="global.html#setAttributeRev">setAttributeRev</a></li><li><a href="global.html#shareStats">shareStats</a></li><li><a href="global.html#showError">showError</a></li><li><a href="global.html#showInfo">showInfo</a></li><li><a href="global.html#showSuccess">showSuccess</a></li><li><a href="global.html#signInWithFirebase">signInWithFirebase</a></li><li><a href="global.html#signUpSaga">signUpSaga</a></li><li><a href="global.html#socialLoginSaga">socialLoginSaga</a></li><li><a href="global.html#storeOnBoardToken">storeOnBoardToken</a></li><li><a href="global.html#timeLayout">timeLayout</a></li><li><a href="global.html#toggleFavoriteSaga">toggleFavoriteSaga</a></li><li><a href="global.html#toggleMusicSaga">toggleMusicSaga</a></li><li><a href="global.html#triggerReview">triggerReview</a></li><li><a href="global.html#updatePasswordSaga">updatePasswordSaga</a></li><li><a href="global.html#updatePlaylistAudioSaga">updatePlaylistAudioSaga</a></li><li><a href="global.html#updateProfileSaga">updateProfileSaga</a></li><li><a href="global.html#updateSubSaga">updateSubSaga</a></li><li><a href="global.html#useAddPlayListData">useAddPlayListData</a></li><li><a href="global.html#useAudioContent">useAudioContent</a></li><li><a href="global.html#useBackgroundSelect">useBackgroundSelect</a></li><li><a href="global.html#useBadges">useBadges</a></li><li><a href="global.html#useCourseDetail">useCourseDetail</a></li><li><a href="global.html#useCourses">useCourses</a></li><li><a href="global.html#useDownloads">useDownloads</a></li><li><a href="global.html#useEBooks">useEBooks</a></li><li><a href="global.html#useEditPlaylist">useEditPlaylist</a></li><li><a href="global.html#useEditProfile">useEditProfile</a></li><li><a href="global.html#useEvent">useEvent</a></li><li><a href="global.html#useFavorites">useFavorites</a></li><li><a href="global.html#useFinalize">useFinalize</a></li><li><a href="global.html#useGoals">useGoals</a></li><li><a href="global.html#useHome">useHome</a></li><li><a href="global.html#useIntroduction">useIntroduction</a></li><li><a href="global.html#useLibrary">useLibrary</a></li><li><a href="global.html#useLibraryDetails">useLibraryDetails</a></li><li><a href="global.html#useMe">useMe</a></li><li><a href="global.html#useMusicPlayer">useMusicPlayer</a></li><li><a href="global.html#useNotifications">useNotifications</a></li><li><a href="global.html#usePlaylistDetails">usePlaylistDetails</a></li><li><a href="global.html#useReadContent">useReadContent</a></li><li><a href="global.html#useReduxStore">useReduxStore</a></li><li><a href="global.html#useReminderDetail">useReminderDetail</a></li><li><a href="global.html#useReminders">useReminders</a></li><li><a href="global.html#useReviews">useReviews</a></li><li><a href="global.html#useScriptDetails">useScriptDetails</a></li><li><a href="global.html#useScripts">useScripts</a></li><li><a href="global.html#useSearch">useSearch</a></li><li><a href="global.html#useSeries">useSeries</a></li><li><a href="global.html#useSeriesDetails">useSeriesDetails</a></li><li><a href="global.html#useSessionSelect">useSessionSelect</a></li><li><a href="global.html#useSetAge">useSetAge</a></li><li><a href="global.html#useSetFeeling">useSetFeeling</a></li><li><a href="global.html#useSetGender">useSetGender</a></li><li><a href="global.html#useSetGoals">useSetGoals</a></li><li><a href="global.html#useSetReccommend">useSetReccommend</a></li><li><a href="global.html#useSetThankyou">useSetThankyou</a></li><li><a href="global.html#useSettings">useSettings</a></li><li><a href="global.html#useSortPlaylist">useSortPlaylist</a></li><li><a href="global.html#useSoundSelect">useSoundSelect</a></li><li><a href="global.html#useStatistics">useStatistics</a></li><li><a href="global.html#useVideoContent">useVideoContent</a></li><li><a href="global.html#useVideoDetails">useVideoDetails</a></li><li><a href="global.html#useViewAll">useViewAll</a></li><li><a href="global.html#valid">valid</a></li><li><a href="global.html#verificationSaga">verificationSaga</a></li><li><a href="global.html#verificationSchema">verificationSchema</a></li><li><a href="global.html#verifyUserSaga">verifyUserSaga</a></li><li><a href="global.html#viewsFormatter">viewsFormatter</a></li><li><a href="global.html#writePermission">writePermission</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue Dec 05 2023 00:57:55 GMT+0500 (GMT+05:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

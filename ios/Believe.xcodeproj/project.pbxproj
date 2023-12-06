@@ -1,0 +1,1245 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		00E356F31AD99517003FC87E /* BelieveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* BelieveTests.m */; };
+		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
+		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		A623BD232ACB02820027D327 /* dummy.swift in Resources */ = {isa = PBXBuildFile; fileRef = FB1D0B532ABF038A00CD523A /* dummy.swift */; };
+		A623BD242ACB02820027D327 /* branch.json in Resources */ = {isa = PBXBuildFile; fileRef = A664A31D2AC2E16800784A8F /* branch.json */; };
+		A623BD252ACB02820027D327 /* interval.wav in Resources */ = {isa = PBXBuildFile; fileRef = A664A31E2AC2E16900784A8F /* interval.wav */; };
+		A664A2BD2AC2DF2D00784A8F /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A28F2AC2DF2D00784A8F /* Fontisto.ttf */; };
+		A664A2BF2AC2DF2D00784A8F /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2902AC2DF2D00784A8F /* Octicons.ttf */; };
+		A664A2C12AC2DF2D00784A8F /* Proxima Nova Alt Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2912AC2DF2D00784A8F /* Proxima Nova Alt Thin.otf */; };
+		A664A2C32AC2DF2D00784A8F /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2922AC2DF2D00784A8F /* Feather.ttf */; };
+		A664A2C52AC2DF2D00784A8F /* Rubik-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2932AC2DF2D00784A8F /* Rubik-MediumItalic.ttf */; };
+		A664A2C72AC2DF2D00784A8F /* Rubik-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2942AC2DF2D00784A8F /* Rubik-Bold.ttf */; };
+		A664A2C92AC2DF2D00784A8F /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2952AC2DF2D00784A8F /* Entypo.ttf */; };
+		A664A2CB2AC2DF2D00784A8F /* Proxima Nova Alt Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2962AC2DF2D00784A8F /* Proxima Nova Alt Bold.otf */; };
+		A664A2CD2AC2DF2D00784A8F /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2972AC2DF2D00784A8F /* FontAwesome5_Brands.ttf */; };
+		A664A2CF2AC2DF2D00784A8F /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2982AC2DF2D00784A8F /* MaterialCommunityIcons.ttf */; };
+		A664A2D12AC2DF2D00784A8F /* Rubik-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2992AC2DF2D00784A8F /* Rubik-SemiBoldItalic.ttf */; };
+		A664A2D32AC2DF2D00784A8F /* Proxima-Nova-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = A664A29A2AC2DF2D00784A8F /* Proxima-Nova-Thin.otf */; };
+		A664A2D52AC2DF2D00784A8F /* Proxima-Nova-Alt-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = A664A29B2AC2DF2D00784A8F /* Proxima-Nova-Alt-Light.otf */; };
+		A664A2D72AC2DF2D00784A8F /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A29C2AC2DF2D00784A8F /* AntDesign.ttf */; };
+		A664A2D92AC2DF2D00784A8F /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A29D2AC2DF2D00784A8F /* Foundation.ttf */; };
+		A664A2DB2AC2DF2D00784A8F /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A29E2AC2DF2D00784A8F /* Ionicons.ttf */; };
+		A664A2DD2AC2DF2D00784A8F /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A29F2AC2DF2D00784A8F /* FontAwesome5_Solid.ttf */; };
+		A664A2DF2AC2DF2D00784A8F /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2A02AC2DF2D00784A8F /* FontAwesome5_Regular.ttf */; };
+		A664A2E12AC2DF2D00784A8F /* Rubik-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2A12AC2DF2D00784A8F /* Rubik-Light.ttf */; };
+		A664A2E32AC2DF2D00784A8F /* Proxima-Nova-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2A22AC2DF2D00784A8F /* Proxima-Nova-Bold.otf */; };
+		A664A2E52AC2DF2D00784A8F /* Proxima Nova Extrabold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2A32AC2DF2D00784A8F /* Proxima Nova Extrabold.otf */; };
+		A664A2E72AC2DF2D00784A8F /* Rubik-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2A42AC2DF2D00784A8F /* Rubik-Medium.ttf */; };
+		A664A2E92AC2DF2D00784A8F /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2A52AC2DF2D00784A8F /* FontAwesome.ttf */; };
+		A664A2EB2AC2DF2D00784A8F /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2A62AC2DF2D00784A8F /* Zocial.ttf */; };
+		A664A2ED2AC2DF2D00784A8F /* Rubik-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2A72AC2DF2D00784A8F /* Rubik-ExtraBoldItalic.ttf */; };
+		A664A2EF2AC2DF2D00784A8F /* Rubik-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2A82AC2DF2D00784A8F /* Rubik-Black.ttf */; };
+		A664A2F12AC2DF2D00784A8F /* Proxima Nova Alt Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2A92AC2DF2D00784A8F /* Proxima Nova Alt Light.otf */; };
+		A664A2F32AC2DF2D00784A8F /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2AA2AC2DF2D00784A8F /* EvilIcons.ttf */; };
+		A664A2F52AC2DF2D00784A8F /* Rubik-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2AB2AC2DF2D00784A8F /* Rubik-Italic.ttf */; };
+		A664A2F72AC2DF2D00784A8F /* Rubik-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2AC2AC2DF2D00784A8F /* Rubik-LightItalic.ttf */; };
+		A664A2F92AC2DF2D00784A8F /* Rubik-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2AD2AC2DF2D00784A8F /* Rubik-SemiBold.ttf */; };
+		A664A2FB2AC2DF2D00784A8F /* Proxima Nova Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2AE2AC2DF2D00784A8F /* Proxima Nova Black.otf */; };
+		A664A2FD2AC2DF2D00784A8F /* Rubik-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2AF2AC2DF2D00784A8F /* Rubik-BlackItalic.ttf */; };
+		A664A2FF2AC2DF2D00784A8F /* Proxima-Nova-Alt-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2B02AC2DF2D00784A8F /* Proxima-Nova-Alt-Bold.otf */; };
+		A664A3012AC2DF2D00784A8F /* Proxima-Nova-Extrabold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2B12AC2DF2D00784A8F /* Proxima-Nova-Extrabold.otf */; };
+		A664A3032AC2DF2D00784A8F /* Rubik-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2B22AC2DF2D00784A8F /* Rubik-ExtraBold.ttf */; };
+		A664A3052AC2DF2D00784A8F /* Proxima Nova Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2B32AC2DF2D00784A8F /* Proxima Nova Bold.otf */; };
+		A664A3072AC2DF2D00784A8F /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2B42AC2DF2D00784A8F /* SimpleLineIcons.ttf */; };
+		A664A3092AC2DF2D00784A8F /* Rubik-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2B52AC2DF2D00784A8F /* Rubik-Regular.ttf */; };
+		A664A30B2AC2DF2D00784A8F /* ProximaNova-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2B62AC2DF2D00784A8F /* ProximaNova-Regular.otf */; };
+		A664A30D2AC2DF2D00784A8F /* Proxima Nova Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2B72AC2DF2D00784A8F /* Proxima Nova Thin.otf */; };
+		A664A30F2AC2DF2D00784A8F /* Proxima-Nova-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2B82AC2DF2D00784A8F /* Proxima-Nova-Black.otf */; };
+		A664A3112AC2DF2D00784A8F /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2B92AC2DF2D00784A8F /* MaterialIcons.ttf */; };
+		A664A3132AC2DF2D00784A8F /* Proxima-Nova-Alt-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2BA2AC2DF2D00784A8F /* Proxima-Nova-Alt-Thin.otf */; };
+		A664A3152AC2DF2D00784A8F /* Rubik-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2BB2AC2DF2D00784A8F /* Rubik-BoldItalic.ttf */; };
+		A664A31C2AC2E14900784A8F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A664A31A2AC2E14900784A8F /* LaunchScreen.storyboard */; };
+		A664A3202AC2E16900784A8F /* branch.json in Resources */ = {isa = PBXBuildFile; fileRef = A664A31D2AC2E16800784A8F /* branch.json */; };
+		A664A3222AC2E16900784A8F /* interval.wav in Resources */ = {isa = PBXBuildFile; fileRef = A664A31E2AC2E16900784A8F /* interval.wav */; };
+		A680F6762AD0AA4700DECAF8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A680F6752AD0AA4700DECAF8 /* GoogleService-Info.plist */; };
+		A6A5148D2AC1EB8F00445A26 /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = A6A5148C2AC1EB8F00445A26 /* NotificationService.m */; };
+		A6A514912AC1EB9000445A26 /* OneSIgnalNotificationServices.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A6A514892AC1EB8F00445A26 /* OneSIgnalNotificationServices.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A6C265122ACF05660050F8D5 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		A6C265272ACF057D0050F8D5 /* Proxima Nova Extrabold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2A32AC2DF2D00784A8F /* Proxima Nova Extrabold.otf */; };
+		A6C265282ACF057D0050F8D5 /* Rubik-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2A42AC2DF2D00784A8F /* Rubik-Medium.ttf */; };
+		A6C2652B2ACF057D0050F8D5 /* Rubik-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2A72AC2DF2D00784A8F /* Rubik-ExtraBoldItalic.ttf */; };
+		A6C2652C2ACF057D0050F8D5 /* Rubik-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2A82AC2DF2D00784A8F /* Rubik-Black.ttf */; };
+		A6C2652D2ACF057D0050F8D5 /* Proxima Nova Alt Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2A92AC2DF2D00784A8F /* Proxima Nova Alt Light.otf */; };
+		A6C2652F2ACF057D0050F8D5 /* Rubik-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2AB2AC2DF2D00784A8F /* Rubik-Italic.ttf */; };
+		A6C265302ACF057D0050F8D5 /* Rubik-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2AC2AC2DF2D00784A8F /* Rubik-LightItalic.ttf */; };
+		A6C265312ACF057D0050F8D5 /* Rubik-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2AD2AC2DF2D00784A8F /* Rubik-SemiBold.ttf */; };
+		A6C265322ACF057D0050F8D5 /* Proxima Nova Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2AE2AC2DF2D00784A8F /* Proxima Nova Black.otf */; };
+		A6C265332ACF057D0050F8D5 /* Rubik-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2AF2AC2DF2D00784A8F /* Rubik-BlackItalic.ttf */; };
+		A6C265342ACF057D0050F8D5 /* Proxima-Nova-Alt-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2B02AC2DF2D00784A8F /* Proxima-Nova-Alt-Bold.otf */; };
+		A6C265352ACF057D0050F8D5 /* Proxima-Nova-Extrabold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2B12AC2DF2D00784A8F /* Proxima-Nova-Extrabold.otf */; };
+		A6C265362ACF057D0050F8D5 /* Rubik-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2B22AC2DF2D00784A8F /* Rubik-ExtraBold.ttf */; };
+		A6C265372ACF057D0050F8D5 /* Proxima Nova Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2B32AC2DF2D00784A8F /* Proxima Nova Bold.otf */; };
+		A6C265392ACF057D0050F8D5 /* Rubik-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2B52AC2DF2D00784A8F /* Rubik-Regular.ttf */; };
+		A6C2653A2ACF057D0050F8D5 /* ProximaNova-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2B62AC2DF2D00784A8F /* ProximaNova-Regular.otf */; };
+		A6C2653B2ACF057D0050F8D5 /* Proxima Nova Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2B72AC2DF2D00784A8F /* Proxima Nova Thin.otf */; };
+		A6C2653C2ACF057D0050F8D5 /* Proxima-Nova-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2B82AC2DF2D00784A8F /* Proxima-Nova-Black.otf */; };
+		A6C2653E2ACF057D0050F8D5 /* Proxima-Nova-Alt-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2BA2AC2DF2D00784A8F /* Proxima-Nova-Alt-Thin.otf */; };
+		A6C2653F2ACF057D0050F8D5 /* Rubik-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A664A2BB2AC2DF2D00784A8F /* Rubik-BoldItalic.ttf */; };
+		A6C265402ACF06040050F8D5 /* Proxima-Nova-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = A664A29A2AC2DF2D00784A8F /* Proxima-Nova-Thin.otf */; };
+		A6D53A7C2AC615B5007BED53 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6D53A7B2AC615B5007BED53 /* StoreKit.framework */; };
+		A8D06D10E83F4634D7D23F5D /* Pods_Believe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF852FD9CDE77B2C4A8E4B65 /* Pods_Believe.framework */; };
+		D73811CDD1E68D22CD061CAB /* Pods_Believe_BelieveTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B711BDB63DC2D435732DE1F8 /* Pods_Believe_BelieveTests.framework */; };
+		FB1D0B542ABF038A00CD523A /* dummy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1D0B532ABF038A00CD523A /* dummy.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		00E356F41AD99517003FC87E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
+			remoteInfo = Believe;
+		};
+		A6A5148F2AC1EB9000445A26 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A6A514882AC1EB8F00445A26;
+			remoteInfo = OneSIgnalNotificationServices;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A6A514922AC1EB9000445A26 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A6A514912AC1EB9000445A26 /* OneSIgnalNotificationServices.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		00E356EE1AD99517003FC87E /* BelieveTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BelieveTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		00E356F21AD99517003FC87E /* BelieveTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BelieveTests.m; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* Believe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Believe.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Believe/AppDelegate.h; sourceTree = "<group>"; };
+		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = Believe/AppDelegate.mm; sourceTree = SOURCE_ROOT; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Believe/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Believe/main.m; sourceTree = "<group>"; };
+		2F11BDD532F2F346B03DF77B /* Pods-Believe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Believe.debug.xcconfig"; path = "Target Support Files/Pods-Believe/Pods-Believe.debug.xcconfig"; sourceTree = "<group>"; };
+		3744116E72810172AACA7F61 /* Pods-Believe-BelieveTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Believe-BelieveTests.release.xcconfig"; path = "Target Support Files/Pods-Believe-BelieveTests/Pods-Believe-BelieveTests.release.xcconfig"; sourceTree = "<group>"; };
+		73F3546D810034E3A16850DB /* Pods-Believe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Believe.release.xcconfig"; path = "Target Support Files/Pods-Believe/Pods-Believe.release.xcconfig"; sourceTree = "<group>"; };
+		A664A28F2AC2DF2D00784A8F /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontisto.ttf; sourceTree = "<group>"; };
+		A664A2902AC2DF2D00784A8F /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Octicons.ttf; sourceTree = "<group>"; };
+		A664A2912AC2DF2D00784A8F /* Proxima Nova Alt Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Proxima Nova Alt Thin.otf"; sourceTree = "<group>"; };
+		A664A2922AC2DF2D00784A8F /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Feather.ttf; sourceTree = "<group>"; };
+		A664A2932AC2DF2D00784A8F /* Rubik-MediumItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-MediumItalic.ttf"; sourceTree = "<group>"; };
+		A664A2942AC2DF2D00784A8F /* Rubik-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-Bold.ttf"; sourceTree = "<group>"; };
+		A664A2952AC2DF2D00784A8F /* Entypo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Entypo.ttf; sourceTree = "<group>"; };
+		A664A2962AC2DF2D00784A8F /* Proxima Nova Alt Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Proxima Nova Alt Bold.otf"; sourceTree = "<group>"; };
+		A664A2972AC2DF2D00784A8F /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Brands.ttf; sourceTree = "<group>"; };
+		A664A2982AC2DF2D00784A8F /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialCommunityIcons.ttf; sourceTree = "<group>"; };
+		A664A2992AC2DF2D00784A8F /* Rubik-SemiBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
+		A664A29A2AC2DF2D00784A8F /* Proxima-Nova-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Proxima-Nova-Thin.otf"; sourceTree = "<group>"; };
+		A664A29B2AC2DF2D00784A8F /* Proxima-Nova-Alt-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Proxima-Nova-Alt-Light.otf"; sourceTree = "<group>"; };
+		A664A29C2AC2DF2D00784A8F /* AntDesign.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AntDesign.ttf; sourceTree = "<group>"; };
+		A664A29D2AC2DF2D00784A8F /* Foundation.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Foundation.ttf; sourceTree = "<group>"; };
+		A664A29E2AC2DF2D00784A8F /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Ionicons.ttf; sourceTree = "<group>"; };
+		A664A29F2AC2DF2D00784A8F /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Solid.ttf; sourceTree = "<group>"; };
+		A664A2A02AC2DF2D00784A8F /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Regular.ttf; sourceTree = "<group>"; };
+		A664A2A12AC2DF2D00784A8F /* Rubik-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-Light.ttf"; sourceTree = "<group>"; };
+		A664A2A22AC2DF2D00784A8F /* Proxima-Nova-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Proxima-Nova-Bold.otf"; sourceTree = "<group>"; };
+		A664A2A32AC2DF2D00784A8F /* Proxima Nova Extrabold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Proxima Nova Extrabold.otf"; sourceTree = "<group>"; };
+		A664A2A42AC2DF2D00784A8F /* Rubik-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-Medium.ttf"; sourceTree = "<group>"; };
+		A664A2A52AC2DF2D00784A8F /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.ttf; sourceTree = "<group>"; };
+		A664A2A62AC2DF2D00784A8F /* Zocial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Zocial.ttf; sourceTree = "<group>"; };
+		A664A2A72AC2DF2D00784A8F /* Rubik-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
+		A664A2A82AC2DF2D00784A8F /* Rubik-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-Black.ttf"; sourceTree = "<group>"; };
+		A664A2A92AC2DF2D00784A8F /* Proxima Nova Alt Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Proxima Nova Alt Light.otf"; sourceTree = "<group>"; };
+		A664A2AA2AC2DF2D00784A8F /* EvilIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EvilIcons.ttf; sourceTree = "<group>"; };
+		A664A2AB2AC2DF2D00784A8F /* Rubik-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-Italic.ttf"; sourceTree = "<group>"; };
+		A664A2AC2AC2DF2D00784A8F /* Rubik-LightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-LightItalic.ttf"; sourceTree = "<group>"; };
+		A664A2AD2AC2DF2D00784A8F /* Rubik-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-SemiBold.ttf"; sourceTree = "<group>"; };
+		A664A2AE2AC2DF2D00784A8F /* Proxima Nova Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Proxima Nova Black.otf"; sourceTree = "<group>"; };
+		A664A2AF2AC2DF2D00784A8F /* Rubik-BlackItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-BlackItalic.ttf"; sourceTree = "<group>"; };
+		A664A2B02AC2DF2D00784A8F /* Proxima-Nova-Alt-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Proxima-Nova-Alt-Bold.otf"; sourceTree = "<group>"; };
+		A664A2B12AC2DF2D00784A8F /* Proxima-Nova-Extrabold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Proxima-Nova-Extrabold.otf"; sourceTree = "<group>"; };
+		A664A2B22AC2DF2D00784A8F /* Rubik-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-ExtraBold.ttf"; sourceTree = "<group>"; };
+		A664A2B32AC2DF2D00784A8F /* Proxima Nova Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Proxima Nova Bold.otf"; sourceTree = "<group>"; };
+		A664A2B42AC2DF2D00784A8F /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
+		A664A2B52AC2DF2D00784A8F /* Rubik-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-Regular.ttf"; sourceTree = "<group>"; };
+		A664A2B62AC2DF2D00784A8F /* ProximaNova-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ProximaNova-Regular.otf"; sourceTree = "<group>"; };
+		A664A2B72AC2DF2D00784A8F /* Proxima Nova Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Proxima Nova Thin.otf"; sourceTree = "<group>"; };
+		A664A2B82AC2DF2D00784A8F /* Proxima-Nova-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Proxima-Nova-Black.otf"; sourceTree = "<group>"; };
+		A664A2B92AC2DF2D00784A8F /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
+		A664A2BA2AC2DF2D00784A8F /* Proxima-Nova-Alt-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Proxima-Nova-Alt-Thin.otf"; sourceTree = "<group>"; };
+		A664A2BB2AC2DF2D00784A8F /* Rubik-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-BoldItalic.ttf"; sourceTree = "<group>"; };
+		A664A3192AC2E13900784A8F /* Believe.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Believe.entitlements; sourceTree = "<group>"; };
+		A664A31A2AC2E14900784A8F /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A664A31D2AC2E16800784A8F /* branch.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = branch.json; sourceTree = "<group>"; };
+		A664A31E2AC2E16900784A8F /* interval.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = interval.wav; sourceTree = "<group>"; };
+		A680F6752AD0AA4700DECAF8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A680F6772AD0AA9C00DECAF8 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A6A514892AC1EB8F00445A26 /* OneSIgnalNotificationServices.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSIgnalNotificationServices.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A6A5148B2AC1EB8F00445A26 /* NotificationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationService.h; sourceTree = "<group>"; };
+		A6A5148C2AC1EB8F00445A26 /* NotificationService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationService.m; sourceTree = "<group>"; };
+		A6A5148E2AC1EB9000445A26 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A6D53A7B2AC615B5007BED53 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		A6D53A7D2AC6163F007BED53 /* OneSIgnalNotificationServices.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OneSIgnalNotificationServices.entitlements; sourceTree = "<group>"; };
+		ABCAF47059D5278C38BB4EDB /* Pods-Believe-BelieveTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Believe-BelieveTests.debug.xcconfig"; path = "Target Support Files/Pods-Believe-BelieveTests/Pods-Believe-BelieveTests.debug.xcconfig"; sourceTree = "<group>"; };
+		B711BDB63DC2D435732DE1F8 /* Pods_Believe_BelieveTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Believe_BelieveTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CF852FD9CDE77B2C4A8E4B65 /* Pods_Believe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Believe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		FB1D0B522ABF038900CD523A /* Believe-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Believe-Bridging-Header.h"; sourceTree = "<group>"; };
+		FB1D0B532ABF038A00CD523A /* dummy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dummy.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		00E356EB1AD99517003FC87E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D73811CDD1E68D22CD061CAB /* Pods_Believe_BelieveTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		13B07F8C1A680F5B00A75B9A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A8D06D10E83F4634D7D23F5D /* Pods_Believe.framework in Frameworks */,
+				A6D53A7C2AC615B5007BED53 /* StoreKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A6A514862AC1EB8F00445A26 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		00E356EF1AD99517003FC87E /* BelieveTests */ = {
+			isa = PBXGroup;
+			children = (
+				00E356F21AD99517003FC87E /* BelieveTests.m */,
+				00E356F01AD99517003FC87E /* Supporting Files */,
+			);
+			path = BelieveTests;
+			sourceTree = "<group>";
+		};
+		00E356F01AD99517003FC87E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				00E356F11AD99517003FC87E /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		13B07FAE1A68108700A75B9A /* Believe */ = {
+			isa = PBXGroup;
+			children = (
+				A680F6772AD0AA9C00DECAF8 /* Info.plist */,
+				A664A3192AC2E13900784A8F /* Believe.entitlements */,
+				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
+				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
+				13B07FB51A68108700A75B9A /* Images.xcassets */,
+				A664A31A2AC2E14900784A8F /* LaunchScreen.storyboard */,
+				13B07FB71A68108700A75B9A /* main.m */,
+			);
+			name = Believe;
+			sourceTree = "<group>";
+		};
+		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A6D53A7B2AC615B5007BED53 /* StoreKit.framework */,
+				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
+				CF852FD9CDE77B2C4A8E4B65 /* Pods_Believe.framework */,
+				B711BDB63DC2D435732DE1F8 /* Pods_Believe_BelieveTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Libraries;
+			sourceTree = "<group>";
+		};
+		83CBB9F61A601CBA00E9B192 = {
+			isa = PBXGroup;
+			children = (
+				A680F6752AD0AA4700DECAF8 /* GoogleService-Info.plist */,
+				A664A28E2AC2DF2D00784A8F /* Resources */,
+				FB1D0B532ABF038A00CD523A /* dummy.swift */,
+				A664A31D2AC2E16800784A8F /* branch.json */,
+				A664A31E2AC2E16900784A8F /* interval.wav */,
+				13B07FAE1A68108700A75B9A /* Believe */,
+				832341AE1AAA6A7D00B99B32 /* Libraries */,
+				00E356EF1AD99517003FC87E /* BelieveTests */,
+				A6A5148A2AC1EB8F00445A26 /* OneSIgnalNotificationServices */,
+				83CBBA001A601CBA00E9B192 /* Products */,
+				2D16E6871FA4F8E400B85C8A /* Frameworks */,
+				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				FB1D0B522ABF038900CD523A /* Believe-Bridging-Header.h */,
+			);
+			indentWidth = 2;
+			sourceTree = "<group>";
+			tabWidth = 2;
+			usesTabs = 0;
+		};
+		83CBBA001A601CBA00E9B192 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				13B07F961A680F5B00A75B9A /* Believe.app */,
+				00E356EE1AD99517003FC87E /* BelieveTests.xctest */,
+				A6A514892AC1EB8F00445A26 /* OneSIgnalNotificationServices.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A664A28E2AC2DF2D00784A8F /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A664A28F2AC2DF2D00784A8F /* Fontisto.ttf */,
+				A664A2902AC2DF2D00784A8F /* Octicons.ttf */,
+				A664A2912AC2DF2D00784A8F /* Proxima Nova Alt Thin.otf */,
+				A664A2922AC2DF2D00784A8F /* Feather.ttf */,
+				A664A2932AC2DF2D00784A8F /* Rubik-MediumItalic.ttf */,
+				A664A2942AC2DF2D00784A8F /* Rubik-Bold.ttf */,
+				A664A2952AC2DF2D00784A8F /* Entypo.ttf */,
+				A664A2962AC2DF2D00784A8F /* Proxima Nova Alt Bold.otf */,
+				A664A2972AC2DF2D00784A8F /* FontAwesome5_Brands.ttf */,
+				A664A2982AC2DF2D00784A8F /* MaterialCommunityIcons.ttf */,
+				A664A2992AC2DF2D00784A8F /* Rubik-SemiBoldItalic.ttf */,
+				A664A29A2AC2DF2D00784A8F /* Proxima-Nova-Thin.otf */,
+				A664A29B2AC2DF2D00784A8F /* Proxima-Nova-Alt-Light.otf */,
+				A664A29C2AC2DF2D00784A8F /* AntDesign.ttf */,
+				A664A29D2AC2DF2D00784A8F /* Foundation.ttf */,
+				A664A29E2AC2DF2D00784A8F /* Ionicons.ttf */,
+				A664A29F2AC2DF2D00784A8F /* FontAwesome5_Solid.ttf */,
+				A664A2A02AC2DF2D00784A8F /* FontAwesome5_Regular.ttf */,
+				A664A2A12AC2DF2D00784A8F /* Rubik-Light.ttf */,
+				A664A2A22AC2DF2D00784A8F /* Proxima-Nova-Bold.otf */,
+				A664A2A32AC2DF2D00784A8F /* Proxima Nova Extrabold.otf */,
+				A664A2A42AC2DF2D00784A8F /* Rubik-Medium.ttf */,
+				A664A2A52AC2DF2D00784A8F /* FontAwesome.ttf */,
+				A664A2A62AC2DF2D00784A8F /* Zocial.ttf */,
+				A664A2A72AC2DF2D00784A8F /* Rubik-ExtraBoldItalic.ttf */,
+				A664A2A82AC2DF2D00784A8F /* Rubik-Black.ttf */,
+				A664A2A92AC2DF2D00784A8F /* Proxima Nova Alt Light.otf */,
+				A664A2AA2AC2DF2D00784A8F /* EvilIcons.ttf */,
+				A664A2AB2AC2DF2D00784A8F /* Rubik-Italic.ttf */,
+				A664A2AC2AC2DF2D00784A8F /* Rubik-LightItalic.ttf */,
+				A664A2AD2AC2DF2D00784A8F /* Rubik-SemiBold.ttf */,
+				A664A2AE2AC2DF2D00784A8F /* Proxima Nova Black.otf */,
+				A664A2AF2AC2DF2D00784A8F /* Rubik-BlackItalic.ttf */,
+				A664A2B02AC2DF2D00784A8F /* Proxima-Nova-Alt-Bold.otf */,
+				A664A2B12AC2DF2D00784A8F /* Proxima-Nova-Extrabold.otf */,
+				A664A2B22AC2DF2D00784A8F /* Rubik-ExtraBold.ttf */,
+				A664A2B32AC2DF2D00784A8F /* Proxima Nova Bold.otf */,
+				A664A2B42AC2DF2D00784A8F /* SimpleLineIcons.ttf */,
+				A664A2B52AC2DF2D00784A8F /* Rubik-Regular.ttf */,
+				A664A2B62AC2DF2D00784A8F /* ProximaNova-Regular.otf */,
+				A664A2B72AC2DF2D00784A8F /* Proxima Nova Thin.otf */,
+				A664A2B82AC2DF2D00784A8F /* Proxima-Nova-Black.otf */,
+				A664A2B92AC2DF2D00784A8F /* MaterialIcons.ttf */,
+				A664A2BA2AC2DF2D00784A8F /* Proxima-Nova-Alt-Thin.otf */,
+				A664A2BB2AC2DF2D00784A8F /* Rubik-BoldItalic.ttf */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A6A5148A2AC1EB8F00445A26 /* OneSIgnalNotificationServices */ = {
+			isa = PBXGroup;
+			children = (
+				A6D53A7D2AC6163F007BED53 /* OneSIgnalNotificationServices.entitlements */,
+				A6A5148B2AC1EB8F00445A26 /* NotificationService.h */,
+				A6A5148C2AC1EB8F00445A26 /* NotificationService.m */,
+				A6A5148E2AC1EB9000445A26 /* Info.plist */,
+			);
+			path = OneSIgnalNotificationServices;
+			sourceTree = "<group>";
+		};
+		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				2F11BDD532F2F346B03DF77B /* Pods-Believe.debug.xcconfig */,
+				73F3546D810034E3A16850DB /* Pods-Believe.release.xcconfig */,
+				ABCAF47059D5278C38BB4EDB /* Pods-Believe-BelieveTests.debug.xcconfig */,
+				3744116E72810172AACA7F61 /* Pods-Believe-BelieveTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		00E356ED1AD99517003FC87E /* BelieveTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "BelieveTests" */;
+			buildPhases = (
+				55E68BFEDA429ADFFE7638DB /* [CP] Check Pods Manifest.lock */,
+				00E356EA1AD99517003FC87E /* Sources */,
+				00E356EB1AD99517003FC87E /* Frameworks */,
+				00E356EC1AD99517003FC87E /* Resources */,
+				D6A852E9D627716F0790AEC0 /* [CP] Embed Pods Frameworks */,
+				D53E313EA17621973F3B1713 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				00E356F51AD99517003FC87E /* PBXTargetDependency */,
+			);
+			name = BelieveTests;
+			productName = BelieveTests;
+			productReference = 00E356EE1AD99517003FC87E /* BelieveTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		13B07F861A680F5B00A75B9A /* Believe */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Believe" */;
+			buildPhases = (
+				D96FC782D39CE638C837B7B9 /* [CP] Check Pods Manifest.lock */,
+				FD10A7F022414F080027D42C /* Start Packager */,
+				13B07F871A680F5B00A75B9A /* Sources */,
+				13B07F8C1A680F5B00A75B9A /* Frameworks */,
+				13B07F8E1A680F5B00A75B9A /* Resources */,
+				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
+				A6A514922AC1EB9000445A26 /* Embed Foundation Extensions */,
+				74C42E7FD645541C3DC7126C /* [CP] Embed Pods Frameworks */,
+				9C089483C37D012EB56BFC8B /* [CP] Copy Pods Resources */,
+				17156CAD329FFC9287558D49 /* [CP-User] [RNFB] Core Configuration */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A6A514902AC1EB9000445A26 /* PBXTargetDependency */,
+			);
+			name = Believe;
+			productName = Believe;
+			productReference = 13B07F961A680F5B00A75B9A /* Believe.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A6A514882AC1EB8F00445A26 /* OneSIgnalNotificationServices */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A6A514952AC1EB9000445A26 /* Build configuration list for PBXNativeTarget "OneSIgnalNotificationServices" */;
+			buildPhases = (
+				A6A514852AC1EB8F00445A26 /* Sources */,
+				A6A514862AC1EB8F00445A26 /* Frameworks */,
+				A6A514872AC1EB8F00445A26 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OneSIgnalNotificationServices;
+			productName = OneSIgnalNotificationServices;
+			productReference = A6A514892AC1EB8F00445A26 /* OneSIgnalNotificationServices.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		83CBB9F71A601CBA00E9B192 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					00E356ED1AD99517003FC87E = {
+						CreatedOnToolsVersion = 6.2;
+						TestTargetID = 13B07F861A680F5B00A75B9A;
+					};
+					13B07F861A680F5B00A75B9A = {
+						LastSwiftMigration = 1430;
+					};
+					A6A514882AC1EB8F00445A26 = {
+						CreatedOnToolsVersion = 14.3.1;
+					};
+				};
+			};
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Believe" */;
+			compatibilityVersion = "Xcode 12.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				de,
+				he,
+				ar,
+				el,
+				ja,
+				uk,
+				es_MX,
+				zh_CN,
+				nb,
+				es,
+				pt_BR,
+				da,
+				it,
+				sk,
+				pt_PT,
+				ms,
+				sv,
+				cs,
+				ko,
+				hu,
+				tr,
+				pl,
+				zh_TW,
+				en_GB,
+				vi,
+				ru,
+				fr_CA,
+				fr,
+				fi,
+				id,
+				nl,
+				th,
+				pt,
+				ro,
+				hr,
+				hi,
+				ca,
+			);
+			mainGroup = 83CBB9F61A601CBA00E9B192;
+			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				13B07F861A680F5B00A75B9A /* Believe */,
+				00E356ED1AD99517003FC87E /* BelieveTests */,
+				A6A514882AC1EB8F00445A26 /* OneSIgnalNotificationServices */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		00E356EC1AD99517003FC87E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		13B07F8E1A680F5B00A75B9A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A6C265402ACF06040050F8D5 /* Proxima-Nova-Thin.otf in Resources */,
+				A6C265272ACF057D0050F8D5 /* Proxima Nova Extrabold.otf in Resources */,
+				A6C265282ACF057D0050F8D5 /* Rubik-Medium.ttf in Resources */,
+				A6C2652B2ACF057D0050F8D5 /* Rubik-ExtraBoldItalic.ttf in Resources */,
+				A6C2652C2ACF057D0050F8D5 /* Rubik-Black.ttf in Resources */,
+				A6C2652D2ACF057D0050F8D5 /* Proxima Nova Alt Light.otf in Resources */,
+				A6C2652F2ACF057D0050F8D5 /* Rubik-Italic.ttf in Resources */,
+				A6C265302ACF057D0050F8D5 /* Rubik-LightItalic.ttf in Resources */,
+				A6C265312ACF057D0050F8D5 /* Rubik-SemiBold.ttf in Resources */,
+				A6C265322ACF057D0050F8D5 /* Proxima Nova Black.otf in Resources */,
+				A6C265332ACF057D0050F8D5 /* Rubik-BlackItalic.ttf in Resources */,
+				A680F6762AD0AA4700DECAF8 /* GoogleService-Info.plist in Resources */,
+				A6C265342ACF057D0050F8D5 /* Proxima-Nova-Alt-Bold.otf in Resources */,
+				A6C265352ACF057D0050F8D5 /* Proxima-Nova-Extrabold.otf in Resources */,
+				A6C265362ACF057D0050F8D5 /* Rubik-ExtraBold.ttf in Resources */,
+				A6C265372ACF057D0050F8D5 /* Proxima Nova Bold.otf in Resources */,
+				A6C265392ACF057D0050F8D5 /* Rubik-Regular.ttf in Resources */,
+				A6C2653A2ACF057D0050F8D5 /* ProximaNova-Regular.otf in Resources */,
+				A6C2653B2ACF057D0050F8D5 /* Proxima Nova Thin.otf in Resources */,
+				A6C2653C2ACF057D0050F8D5 /* Proxima-Nova-Black.otf in Resources */,
+				A6C2653E2ACF057D0050F8D5 /* Proxima-Nova-Alt-Thin.otf in Resources */,
+				A6C2653F2ACF057D0050F8D5 /* Rubik-BoldItalic.ttf in Resources */,
+				A6C265122ACF05660050F8D5 /* Images.xcassets in Resources */,
+				A623BD232ACB02820027D327 /* dummy.swift in Resources */,
+				A623BD242ACB02820027D327 /* branch.json in Resources */,
+				A623BD252ACB02820027D327 /* interval.wav in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A6A514872AC1EB8F00445A26 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A664A2C12AC2DF2D00784A8F /* Proxima Nova Alt Thin.otf in Resources */,
+				A664A30B2AC2DF2D00784A8F /* ProximaNova-Regular.otf in Resources */,
+				A664A2C92AC2DF2D00784A8F /* Entypo.ttf in Resources */,
+				A664A2D72AC2DF2D00784A8F /* AntDesign.ttf in Resources */,
+				A664A3052AC2DF2D00784A8F /* Proxima Nova Bold.otf in Resources */,
+				A664A2D12AC2DF2D00784A8F /* Rubik-SemiBoldItalic.ttf in Resources */,
+				A664A2E52AC2DF2D00784A8F /* Proxima Nova Extrabold.otf in Resources */,
+				A664A2FD2AC2DF2D00784A8F /* Rubik-BlackItalic.ttf in Resources */,
+				A664A2F52AC2DF2D00784A8F /* Rubik-Italic.ttf in Resources */,
+				A664A2D52AC2DF2D00784A8F /* Proxima-Nova-Alt-Light.otf in Resources */,
+				A664A3222AC2E16900784A8F /* interval.wav in Resources */,
+				A664A2F92AC2DF2D00784A8F /* Rubik-SemiBold.ttf in Resources */,
+				A664A3132AC2DF2D00784A8F /* Proxima-Nova-Alt-Thin.otf in Resources */,
+				A664A3092AC2DF2D00784A8F /* Rubik-Regular.ttf in Resources */,
+				A664A2FF2AC2DF2D00784A8F /* Proxima-Nova-Alt-Bold.otf in Resources */,
+				A664A3072AC2DF2D00784A8F /* SimpleLineIcons.ttf in Resources */,
+				A664A30D2AC2DF2D00784A8F /* Proxima Nova Thin.otf in Resources */,
+				A664A3202AC2E16900784A8F /* branch.json in Resources */,
+				A664A3032AC2DF2D00784A8F /* Rubik-ExtraBold.ttf in Resources */,
+				A664A2C72AC2DF2D00784A8F /* Rubik-Bold.ttf in Resources */,
+				A664A2DF2AC2DF2D00784A8F /* FontAwesome5_Regular.ttf in Resources */,
+				A664A2ED2AC2DF2D00784A8F /* Rubik-ExtraBoldItalic.ttf in Resources */,
+				A664A2E32AC2DF2D00784A8F /* Proxima-Nova-Bold.otf in Resources */,
+				A664A2E72AC2DF2D00784A8F /* Rubik-Medium.ttf in Resources */,
+				A664A2E12AC2DF2D00784A8F /* Rubik-Light.ttf in Resources */,
+				A664A30F2AC2DF2D00784A8F /* Proxima-Nova-Black.otf in Resources */,
+				A664A2D92AC2DF2D00784A8F /* Foundation.ttf in Resources */,
+				A664A3152AC2DF2D00784A8F /* Rubik-BoldItalic.ttf in Resources */,
+				A664A2CD2AC2DF2D00784A8F /* FontAwesome5_Brands.ttf in Resources */,
+				A664A3012AC2DF2D00784A8F /* Proxima-Nova-Extrabold.otf in Resources */,
+				A664A2EF2AC2DF2D00784A8F /* Rubik-Black.ttf in Resources */,
+				A664A2BF2AC2DF2D00784A8F /* Octicons.ttf in Resources */,
+				A664A2C52AC2DF2D00784A8F /* Rubik-MediumItalic.ttf in Resources */,
+				A664A2F32AC2DF2D00784A8F /* EvilIcons.ttf in Resources */,
+				A664A2DB2AC2DF2D00784A8F /* Ionicons.ttf in Resources */,
+				A664A2EB2AC2DF2D00784A8F /* Zocial.ttf in Resources */,
+				A664A2F72AC2DF2D00784A8F /* Rubik-LightItalic.ttf in Resources */,
+				A664A2CF2AC2DF2D00784A8F /* MaterialCommunityIcons.ttf in Resources */,
+				A664A31C2AC2E14900784A8F /* LaunchScreen.storyboard in Resources */,
+				A664A2C32AC2DF2D00784A8F /* Feather.ttf in Resources */,
+				A664A3112AC2DF2D00784A8F /* MaterialIcons.ttf in Resources */,
+				A664A2E92AC2DF2D00784A8F /* FontAwesome.ttf in Resources */,
+				A664A2D32AC2DF2D00784A8F /* Proxima-Nova-Thin.otf in Resources */,
+				A664A2CB2AC2DF2D00784A8F /* Proxima Nova Alt Bold.otf in Resources */,
+				A664A2BD2AC2DF2D00784A8F /* Fontisto.ttf in Resources */,
+				A664A2DD2AC2DF2D00784A8F /* FontAwesome5_Solid.ttf in Resources */,
+				A664A2FB2AC2DF2D00784A8F /* Proxima Nova Black.otf in Resources */,
+				A664A2F12AC2DF2D00784A8F /* Proxima Nova Alt Light.otf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/.xcode.env.local",
+				"$(SRCROOT)/.xcode.env",
+			);
+			name = "Bundle React Native code and images";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
+		};
+		17156CAD329FFC9287558D49 /* [CP-User] [RNFB] Core Configuration */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			name = "[CP-User] [RNFB] Core Configuration";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/usr/bin/env bash\n#\n# Copyright (c) 2016-present Invertase Limited & Contributors\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this library except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\nset -e\n\n_MAX_LOOKUPS=2;\n_SEARCH_RESULT=''\n_RN_ROOT_EXISTS=''\n_CURRENT_LOOKUPS=1\n_JSON_ROOT=\"'react-native'\"\n_JSON_FILE_NAME='firebase.json'\n_JSON_OUTPUT_BASE64='e30=' # { }\n_CURRENT_SEARCH_DIR=${PROJECT_DIR}\n_PLIST_BUDDY=/usr/libexec/PlistBuddy\n_TARGET_PLIST=\"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\"\n_DSYM_PLIST=\"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist\"\n\n# plist arrays\n_PLIST_ENTRY_KEYS=()\n_PLIST_ENTRY_TYPES=()\n_PLIST_ENTRY_VALUES=()\n\nfunction setPlistValue {\n  echo \"info:      setting plist entry '$1' of type '$2' in file '$4'\"\n  ${_PLIST_BUDDY} -c \"Add :$1 $2 '$3'\" $4 || echo \"info:      '$1' already exists\"\n}\n\nfunction getFirebaseJsonKeyValue () {\n  if [[ ${_RN_ROOT_EXISTS} ]]; then\n    ruby -Ku -e \"require 'rubygems';require 'json'; output=JSON.parse('$1'); puts output[$_JSON_ROOT]['$2']\"\n  else\n    echo \"\"\n  fi;\n}\n\nfunction jsonBoolToYesNo () {\n  if [[ $1 == \"false\" ]]; then\n    echo \"NO\"\n  elif [[ $1 == \"true\" ]]; then\n    echo \"YES\"\n  else echo \"NO\"\n  fi\n}\n\necho \"info: -> RNFB build script started\"\necho \"info: 1) Locating ${_JSON_FILE_NAME} file:\"\n\nif [[ -z ${_CURRENT_SEARCH_DIR} ]]; then\n  _CURRENT_SEARCH_DIR=$(pwd)\nfi;\n\nwhile true; do\n  _CURRENT_SEARCH_DIR=$(dirname \"$_CURRENT_SEARCH_DIR\")\n  if [[ \"$_CURRENT_SEARCH_DIR\" == \"/\" ]] || [[ ${_CURRENT_LOOKUPS} -gt ${_MAX_LOOKUPS} ]]; then break; fi;\n  echo \"info:      ($_CURRENT_LOOKUPS of $_MAX_LOOKUPS) Searching in '$_CURRENT_SEARCH_DIR' for a ${_JSON_FILE_NAME} file.\"\n  _SEARCH_RESULT=$(find \"$_CURRENT_SEARCH_DIR\" -maxdepth 2 -name ${_JSON_FILE_NAME} -print | /usr/bin/head -n 1)\n  if [[ ${_SEARCH_RESULT} ]]; then\n    echo \"info:      ${_JSON_FILE_NAME} found at $_SEARCH_RESULT\"\n    break;\n  fi;\n  _CURRENT_LOOKUPS=$((_CURRENT_LOOKUPS+1))\ndone\n\nif [[ ${_SEARCH_RESULT} ]]; then\n  _JSON_OUTPUT_RAW=$(cat \"${_SEARCH_RESULT}\")\n  _RN_ROOT_EXISTS=$(ruby -Ku -e \"require 'rubygems';require 'json'; output=JSON.parse('$_JSON_OUTPUT_RAW'); puts output[$_JSON_ROOT]\" || echo '')\n\n  if [[ ${_RN_ROOT_EXISTS} ]]; then\n    if ! python3 --version >/dev/null 2>&1; then echo \"python3 not found, firebase.json file processing error.\" && exit 1; fi\n    _JSON_OUTPUT_BASE64=$(python3 -c 'import json,sys,base64;print(base64.b64encode(bytes(json.dumps(json.loads(open('\"'${_SEARCH_RESULT}'\"', '\"'rb'\"').read())['${_JSON_ROOT}']), '\"'utf-8'\"')).decode())' || echo \"e30=\")\n  fi\n\n  _PLIST_ENTRY_KEYS+=(\"firebase_json_raw\")\n  _PLIST_ENTRY_TYPES+=(\"string\")\n  _PLIST_ENTRY_VALUES+=(\"$_JSON_OUTPUT_BASE64\")\n\n  # config.app_data_collection_default_enabled\n  _APP_DATA_COLLECTION_ENABLED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"app_data_collection_default_enabled\")\n  if [[ $_APP_DATA_COLLECTION_ENABLED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseDataCollectionDefaultEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_APP_DATA_COLLECTION_ENABLED\")\")\n  fi\n\n  # config.analytics_auto_collection_enabled\n  _ANALYTICS_AUTO_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_auto_collection_enabled\")\n  if [[ $_ANALYTICS_AUTO_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FIREBASE_ANALYTICS_COLLECTION_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AUTO_COLLECTION\")\")\n  fi\n\n  # config.analytics_collection_deactivated\n  _ANALYTICS_DEACTIVATED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_collection_deactivated\")\n  if [[ $_ANALYTICS_DEACTIVATED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FIREBASE_ANALYTICS_COLLECTION_DEACTIVATED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_DEACTIVATED\")\")\n  fi\n\n  # config.analytics_idfv_collection_enabled\n  _ANALYTICS_IDFV_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_idfv_collection_enabled\")\n  if [[ $_ANALYTICS_IDFV_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_IDFV_COLLECTION_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_IDFV_COLLECTION\")\")\n  fi\n\n  # config.analytics_default_allow_ad_personalization_signals\n  _ANALYTICS_PERSONALIZATION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_default_allow_ad_personalization_signals\")\n  if [[ $_ANALYTICS_PERSONALIZATION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_PERSONALIZATION\")\")\n  fi\n\n  # config.analytics_registration_with_ad_network_enabled\n  _ANALYTICS_REGISTRATION_WITH_AD_NETWORK=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"google_analytics_registration_with_ad_network_enabled\")\n  if [[ $_ANALYTICS_REGISTRATION_WITH_AD_NETWORK ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_REGISTRATION_WITH_AD_NETWORK_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_REGISTRATION_WITH_AD_NETWORK\")\")\n  fi\n\n  # config.google_analytics_automatic_screen_reporting_enabled\n  _ANALYTICS_AUTO_SCREEN_REPORTING=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"google_analytics_automatic_screen_reporting_enabled\")\n  if [[ $_ANALYTICS_AUTO_SCREEN_REPORTING ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseAutomaticScreenReportingEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AUTO_SCREEN_REPORTING\")\")\n  fi\n\n  # config.perf_auto_collection_enabled\n  _PERF_AUTO_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"perf_auto_collection_enabled\")\n  if [[ $_PERF_AUTO_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"firebase_performance_collection_enabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_PERF_AUTO_COLLECTION\")\")\n  fi\n\n  # config.perf_collection_deactivated\n  _PERF_DEACTIVATED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"perf_collection_deactivated\")\n  if [[ $_PERF_DEACTIVATED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"firebase_performance_collection_deactivated\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_PERF_DEACTIVATED\")\")\n  fi\n\n  # config.messaging_auto_init_enabled\n  _MESSAGING_AUTO_INIT=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"messaging_auto_init_enabled\")\n  if [[ $_MESSAGING_AUTO_INIT ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseMessagingAutoInitEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_MESSAGING_AUTO_INIT\")\")\n  fi\n\n  # config.in_app_messaging_auto_colllection_enabled\n  _FIAM_AUTO_INIT=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"in_app_messaging_auto_collection_enabled\")\n  if [[ $_FIAM_AUTO_INIT ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseInAppMessagingAutomaticDataCollectionEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_FIAM_AUTO_INIT\")\")\n  fi\n\n  # config.app_check_token_auto_refresh\n  _APP_CHECK_TOKEN_AUTO_REFRESH=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"app_check_token_auto_refresh\")\n  if [[ $_APP_CHECK_TOKEN_AUTO_REFRESH ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseAppCheckTokenAutoRefreshEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_APP_CHECK_TOKEN_AUTO_REFRESH\")\")\n  fi\n\n  # config.crashlytics_disable_auto_disabler - undocumented for now - mainly for debugging, document if becomes useful\n  _CRASHLYTICS_AUTO_DISABLE_ENABLED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"crashlytics_disable_auto_disabler\")\n  if [[ $_CRASHLYTICS_AUTO_DISABLE_ENABLED == \"true\" ]]; then\n    echo \"Disabled Crashlytics auto disabler.\" # do nothing\n  else\n    _PLIST_ENTRY_KEYS+=(\"FirebaseCrashlyticsCollectionEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"NO\")\n  fi\nelse\n  _PLIST_ENTRY_KEYS+=(\"firebase_json_raw\")\n  _PLIST_ENTRY_TYPES+=(\"string\")\n  _PLIST_ENTRY_VALUES+=(\"$_JSON_OUTPUT_BASE64\")\n  echo \"warning:   A firebase.json file was not found, whilst this file is optional it is recommended to include it to configure firebase services in React Native Firebase.\"\nfi;\n\necho \"info: 2) Injecting Info.plist entries: \"\n\n# Log out the keys we're adding\nfor i in \"${!_PLIST_ENTRY_KEYS[@]}\"; do\n  echo \"    ->  $i) ${_PLIST_ENTRY_KEYS[$i]}\" \"${_PLIST_ENTRY_TYPES[$i]}\" \"${_PLIST_ENTRY_VALUES[$i]}\"\ndone\n\nfor plist in \"${_TARGET_PLIST}\" \"${_DSYM_PLIST}\" ; do\n  if [[ -f \"${plist}\" ]]; then\n\n    # paths with spaces break the call to setPlistValue. temporarily modify\n    # the shell internal field separator variable (IFS), which normally\n    # includes spaces, to consist only of line breaks\n    oldifs=$IFS\n    IFS=\"\n\"\n\n    for i in \"${!_PLIST_ENTRY_KEYS[@]}\"; do\n      setPlistValue \"${_PLIST_ENTRY_KEYS[$i]}\" \"${_PLIST_ENTRY_TYPES[$i]}\" \"${_PLIST_ENTRY_VALUES[$i]}\" \"${plist}\"\n    done\n\n    # restore the original internal field separator value\n    IFS=$oldifs\n  else\n    echo \"warning:   A Info.plist build output file was not found (${plist})\"\n  fi\ndone\n\necho \"info: <- RNFB build script finished\"\n";
+		};
+		55E68BFEDA429ADFFE7638DB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Believe-BelieveTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		74C42E7FD645541C3DC7126C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Believe/Pods-Believe-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Believe/Pods-Believe-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Believe/Pods-Believe-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9C089483C37D012EB56BFC8B /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Believe/Pods-Believe-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Believe/Pods-Believe-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Believe/Pods-Believe-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D53E313EA17621973F3B1713 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Believe-BelieveTests/Pods-Believe-BelieveTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Believe-BelieveTests/Pods-Believe-BelieveTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Believe-BelieveTests/Pods-Believe-BelieveTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D6A852E9D627716F0790AEC0 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Believe-BelieveTests/Pods-Believe-BelieveTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Believe-BelieveTests/Pods-Believe-BelieveTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Believe-BelieveTests/Pods-Believe-BelieveTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D96FC782D39CE638C837B7B9 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Believe-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FD10A7F022414F080027D42C /* Start Packager */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 12;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Start Packager";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		00E356EA1AD99517003FC87E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00E356F31AD99517003FC87E /* BelieveTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		13B07F871A680F5B00A75B9A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
+				FB1D0B542ABF038A00CD523A /* dummy.swift in Sources */,
+				13B07FC11A68108700A75B9A /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A6A514852AC1EB8F00445A26 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A6A5148D2AC1EB8F00445A26 /* NotificationService.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 13B07F861A680F5B00A75B9A /* Believe */;
+			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
+		};
+		A6A514902AC1EB9000445A26 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A6A514882AC1EB8F00445A26 /* OneSIgnalNotificationServices */;
+			targetProxy = A6A5148F2AC1EB9000445A26 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		00E356F61AD99517003FC87E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = ABCAF47059D5278C38BB4EDB /* Pods-Believe-BelieveTests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = BelieveTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/swift",
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lc++",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.hyptalk.believe;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Believe.app/Believe";
+			};
+			name = Debug;
+		};
+		00E356F71AD99517003FC87E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3744116E72810172AACA7F61 /* Pods-Believe-BelieveTests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COPY_PHASE_STRIP = NO;
+				INFOPLIST_FILE = BelieveTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/swift",
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lc++",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.hyptalk.believe;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Believe.app/Believe";
+			};
+			name = Release;
+		};
+		13B07F941A680F5B00A75B9A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2F11BDD532F2F346B03DF77B /* Pods-Believe.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Believe/Believe.entitlements;
+				CURRENT_PROJECT_VERSION = 14;
+				DEVELOPMENT_TEAM = NPJ23CSQ3X;
+				ENABLE_BITCODE = NO;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
+				INFOPLIST_FILE = Believe/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Believe;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/swift",
+				);
+				MARKETING_VERSION = 1.0.1;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.hyptalk.believe;
+				PRODUCT_NAME = Believe;
+				SWIFT_OBJC_BRIDGING_HEADER = "Believe-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		13B07F951A680F5B00A75B9A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 73F3546D810034E3A16850DB /* Pods-Believe.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Believe/Believe.entitlements;
+				CURRENT_PROJECT_VERSION = 14;
+				DEVELOPMENT_TEAM = NPJ23CSQ3X;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
+				INFOPLIST_FILE = Believe/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Believe;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/swift",
+				);
+				MARKETING_VERSION = 1.0.1;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.hyptalk.believe;
+				PRODUCT_NAME = Believe;
+				SWIFT_OBJC_BRIDGING_HEADER = "Believe-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		83CBBA201A601CBA00E9B192 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_ON_DEMAND_RESOURCES = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers/react/nativemodule/core",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers/platform/ios",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers/react/renderer/graphics/platform/ios",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					/usr/lib/swift,
+					"$(inherited)",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SDKROOT)/usr/lib/swift\"",
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
+				);
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-DFOLLY_NO_CONFIG",
+					"-DFOLLY_MOBILE=1",
+					"-DFOLLY_USE_LIBCPP=1",
+				);
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		83CBBA211A601CBA00E9B192 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_ON_DEMAND_RESOURCES = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers/react/nativemodule/core",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers/platform/ios",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers/react/renderer/graphics/platform/ios",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					/usr/lib/swift,
+					"$(inherited)",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SDKROOT)/usr/lib/swift\"",
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
+				);
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-DFOLLY_NO_CONFIG",
+					"-DFOLLY_MOBILE=1",
+					"-DFOLLY_USE_LIBCPP=1",
+				);
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A6A514932AC1EB9000445A26 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = OneSIgnalNotificationServices/OneSIgnalNotificationServices.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = NPJ23CSQ3X;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OneSIgnalNotificationServices/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = OneSIgnalNotificationServices;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/swift",
+				);
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hyptalk.believe.OneSIgnalNotificationServices;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A6A514942AC1EB9000445A26 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = OneSIgnalNotificationServices/OneSIgnalNotificationServices.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = NPJ23CSQ3X;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OneSIgnalNotificationServices/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = OneSIgnalNotificationServices;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/swift",
+				);
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hyptalk.believe.OneSIgnalNotificationServices;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "BelieveTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00E356F61AD99517003FC87E /* Debug */,
+				00E356F71AD99517003FC87E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Believe" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				13B07F941A680F5B00A75B9A /* Debug */,
+				13B07F951A680F5B00A75B9A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Believe" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				83CBBA201A601CBA00E9B192 /* Debug */,
+				83CBBA211A601CBA00E9B192 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A6A514952AC1EB9000445A26 /* Build configuration list for PBXNativeTarget "OneSIgnalNotificationServices" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A6A514932AC1EB9000445A26 /* Debug */,
+				A6A514942AC1EB9000445A26 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 83CBB9F71A601CBA00E9B192 /* Project object */;
+}
