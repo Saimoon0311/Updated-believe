@@ -22,13 +22,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const getCredentials = () => {
   if (__DEV__)
     return {
-      baseURL: 'https://api.believehypnosis.app/api',
+      baseURL: 'https://virtualrealitycreators.com/Believe-Backend/api',
       // baseURL: 'https://virtualrealitycreators.com/Believe-Backend/api',
     };
   else {
     console.log = () => {};
     return {
-      baseURL: 'https://api.believehypnosis.app/api',
+      baseURL: 'https://virtualrealitycreators.com/Believe-Backend/api',
     };
   }
 };
